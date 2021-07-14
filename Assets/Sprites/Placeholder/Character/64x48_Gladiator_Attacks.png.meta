@@ -1,0 +1,924 @@
+fileFormatVersion: 2
+guid: e100f944ccfe4eb4bb8878f2f8987d08
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8300452240716802954
+    second: 64x48_Gladiator_Attacks_0
+  - first:
+      213: -1364863808006718712
+    second: 64x48_Gladiator_Attacks_1
+  - first:
+      213: 8803461265863044309
+    second: 64x48_Gladiator_Attacks_2
+  - first:
+      213: 4743425952703086800
+    second: 64x48_Gladiator_Attacks_3
+  - first:
+      213: 6144852427926718047
+    second: 64x48_Gladiator_Attacks_4
+  - first:
+      213: -3735320001889738945
+    second: 64x48_Gladiator_Attacks_5
+  - first:
+      213: 1129944351826558549
+    second: 64x48_Gladiator_Attacks_6
+  - first:
+      213: 1672495701571727011
+    second: 64x48_Gladiator_Attacks_7
+  - first:
+      213: -589667125907861679
+    second: 64x48_Gladiator_Attacks_8
+  - first:
+      213: -3036047380283651512
+    second: 64x48_Gladiator_Attacks_9
+  - first:
+      213: 59246565036008577
+    second: 64x48_Gladiator_Attacks_10
+  - first:
+      213: 4287754082775242363
+    second: 64x48_Gladiator_Attacks_11
+  - first:
+      213: 5026464891284723190
+    second: 64x48_Gladiator_Attacks_12
+  - first:
+      213: -8071708915133150807
+    second: 64x48_Gladiator_Attacks_13
+  - first:
+      213: 4079620292497376304
+    second: 64x48_Gladiator_Attacks_14
+  - first:
+      213: 4038332075189585482
+    second: 64x48_Gladiator_Attacks_15
+  - first:
+      213: 1427641976122200049
+    second: 64x48_Gladiator_Attacks_16
+  - first:
+      213: 2622967739516874329
+    second: 64x48_Gladiator_Attacks_17
+  - first:
+      213: -2839345159146164386
+    second: 64x48_Gladiator_Attacks_18
+  - first:
+      213: -2082752401303762517
+    second: 64x48_Gladiator_Attacks_19
+  - first:
+      213: 1808486850096924878
+    second: 64x48_Gladiator_Attacks_20
+  - first:
+      213: -933068376675739799
+    second: 64x48_Gladiator_Attacks_21
+  - first:
+      213: -7255182276760305889
+    second: 64x48_Gladiator_Attacks_22
+  - first:
+      213: 8791301348359024085
+    second: 64x48_Gladiator_Attacks_23
+  - first:
+      213: -3940305759544193455
+    second: 64x48_Gladiator_Attacks_24
+  - first:
+      213: -1501093461238475126
+    second: 64x48_Gladiator_Attacks_25
+  - first:
+      213: -4697779471060910278
+    second: 64x48_Gladiator_Attacks_26
+  - first:
+      213: -440397624700833178
+    second: 64x48_Gladiator_Attacks_27
+  - first:
+      213: -5912216999029905914
+    second: 64x48_Gladiator_Attacks_28
+  - first:
+      213: 4563621677493943410
+    second: 64x48_Gladiator_Attacks_29
+  - first:
+      213: -7426619595825239789
+    second: 64x48_Gladiator_Attacks_30
+  - first:
+      213: 7229949272037248586
+    second: 64x48_Gladiator_Attacks_31
+  - first:
+      213: 1769528500367020575
+    second: 64x48_Gladiator_Attacks_32
+  - first:
+      213: -1242972366031360594
+    second: 64x48_Gladiator_Attacks_33
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_0
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 289
+        width: 25
+        height: 36
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8b2503d551213370800000000000000
+      internalID: 8300452240716802954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_1
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 289
+        width: 25
+        height: 35
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80bf8f419970f0de0800000000000000
+      internalID: -1364863808006718712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_2
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 241
+        width: 25
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5dc6da9e06d2c2a70800000000000000
+      internalID: 8803461265863044309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_3
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 241
+        width: 24
+        height: 36
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d08c31b5c804d140800000000000000
+      internalID: 4743425952703086800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_4
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 193
+        width: 29
+        height: 35
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f56c4c3f9b6e64550800000000000000
+      internalID: 6144852427926718047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_5
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 193
+        width: 31
+        height: 35
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3f53f4bf3a792cc0800000000000000
+      internalID: -3735320001889738945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_6
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 193
+        width: 26
+        height: 36
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55eb49ab66e5eaf00800000000000000
+      internalID: 1129944351826558549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_7
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 145
+        width: 23
+        height: 39
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3aeec84baf5e53710800000000000000
+      internalID: 1672495701571727011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_8
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 145
+        width: 23
+        height: 39
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15f49888fd411d7f0800000000000000
+      internalID: -589667125907861679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_9
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 145
+        width: 30
+        height: 36
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84a00f84efacdd5d0800000000000000
+      internalID: -3036047380283651512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_10
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 145
+        width: 31
+        height: 36
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 184222fdf6c72d000800000000000000
+      internalID: 59246565036008577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_11
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 145
+        width: 26
+        height: 39
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b769c0cee99218b30800000000000000
+      internalID: 4287754082775242363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_12
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 145
+        width: 24
+        height: 39
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f59ff0ff2791c540800000000000000
+      internalID: 5026464891284723190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_13
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 145
+        width: 24
+        height: 39
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a98227e1878bff80800000000000000
+      internalID: -8071708915133150807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_14
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 145
+        width: 24
+        height: 37
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03408c09a09bd9830800000000000000
+      internalID: 4079620292497376304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_15
+      rect:
+        serializedVersion: 2
+        x: 529
+        y: 145
+        width: 29
+        height: 31
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a46cdba50a90b0830800000000000000
+      internalID: 4038332075189585482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_16
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 97
+        width: 28
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ff433530d000d310800000000000000
+      internalID: 1427641976122200049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_17
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 97
+        width: 27
+        height: 29
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95e66331347a66420800000000000000
+      internalID: 2622967739516874329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_18
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 98
+        width: 20
+        height: 43
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5f2e5a0f9e9898d0800000000000000
+      internalID: -2839345159146164386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_19
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 98
+        width: 24
+        height: 37
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba98235d9b39813e0800000000000000
+      internalID: -2082752401303762517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_20
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 97
+        width: 26
+        height: 36
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec80ef85539091910800000000000000
+      internalID: 1808486850096924878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_21
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 97
+        width: 27
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 967971941431d03f0800000000000000
+      internalID: -933068376675739799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_22
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 49
+        width: 28
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1ffdfca82a605b90800000000000000
+      internalID: -7255182276760305889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_23
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 49
+        width: 27
+        height: 29
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5dd2a5e7ff9f00a70800000000000000
+      internalID: 8791301348359024085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_24
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 49
+        width: 32
+        height: 33
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15e41ffc9c83159c0800000000000000
+      internalID: -3940305759544193455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_25
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 49
+        width: 32
+        height: 33
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a86183c337b0b2be0800000000000000
+      internalID: -1501093461238475126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_26
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1
+        width: 28
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3fba4206722eceb0800000000000000
+      internalID: -4697779471060910278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_27
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 1
+        width: 27
+        height: 29
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 662f7c391b463e9f0800000000000000
+      internalID: -440397624700833178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_28
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 1
+        width: 30
+        height: 33
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 606ebc1b6f593fda0800000000000000
+      internalID: -5912216999029905914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_29
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 1
+        width: 29
+        height: 33
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27c7c409cbd355f30800000000000000
+      internalID: 4563621677493943410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_30
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 1
+        width: 25
+        height: 35
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 319a1e453d85fe890800000000000000
+      internalID: -7426619595825239789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_31
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 1
+        width: 32
+        height: 33
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4ecfd79e80f55460800000000000000
+      internalID: 7229949272037248586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_32
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 1
+        width: 28
+        height: 33
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f125e44bbc0ae8810800000000000000
+      internalID: 1769528500367020575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 64x48_Gladiator_Attacks_33
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 1
+        width: 24
+        height: 35
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eade219f73310cee0800000000000000
+      internalID: -1242972366031360594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
