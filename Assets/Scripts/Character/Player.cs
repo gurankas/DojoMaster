@@ -6,33 +6,35 @@ using UnityEngine.UI;
 
 public class Player : BaseCharacter
 {
-
-    //character move speed
+    float runInput = 0;
 
     static float health;
-
-    public float speed = 5;
-
     public BoxCollider2D player;
 
-    // bool value about flip character
-    private bool m_FacingRight = true;
-    private string healthX = "X";
+    public LayerMask whatIsGround;
+    public bool isGrounded;
 
-    Rigidbody2D rb;
-    SpriteRenderer sr;
-    Animator anim;
+    private float jumpTimeCounter;
+    public float jumpTime;
+    private bool isJumping;
 
-    private void OnEnable()
-    {
+    public LayerMask whatIsWall;
+    public bool onWall;
+    public bool onRightWall;
+    public bool onLeftWall;
+    public int side;
 
-        rb = GetComponent<Rigidbody2D>();
+    public float collisionRadius;
+    public Vector2 rightOffset;
+    public Vector2 leftOffset;
 
-        sr = GetComponent<SpriteRenderer>();
+    public float leaveWallJumpTime = 0.2f;
+    private float wallJumpTime;
+    public float wallSlideSpeed = 0.5f;
+    public float wallDistance = 0.5f;
+    private bool isWallSliding = false;
 
-        anim = GetComponent<Animator>();
 
-    }
     // Start is called before the first frame update
     void Start()
     {
@@ -42,57 +44,77 @@ public class Player : BaseCharacter
         health = 5;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        float runInput = Input.GetAxisRaw("Horizontal");
+        //movement
+        runInput = Input.GetAxisRaw("Horizontal");
 
         Move(runInput);
 
     }
 
-
-    protected void Move(float horizontalInput)
+    private void Update()
     {
-        //We set the velocity based on the input of the player
-        //We set the y to rb.velocity.y, because if we set it to 0 our object does not move down with gravity
-        rb.velocity = new Vector2(horizontalInput * speed, rb.velocity.y);
 
-        //If moving left...
-        if (horizontalInput > 0 && !m_FacingRight)
+        Jump();
+
+        //wall check
+
+        onWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, whatIsWall) || Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, whatIsWall);
+        onRightWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, whatIsWall);
+        onLeftWall = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, whatIsWall);
+        side = onRightWall ? 1 : -1;
+
+
+        if (onWall && !isGrounded && runInput != 0)
         {
-            // ... flip the player.
-            Flip();
+            isWallSliding = true;
+            wallJumpTime = Time.time + leaveWallJumpTime;
         }
-        // Otherwise if the input is moving the player left and the player is facing right...
-        else if (horizontalInput < 0 && m_FacingRight)
+        else if (wallJumpTime < Time.time)
         {
-            // ... flip the player.
-            Flip();
+            isWallSliding = false;
         }
 
-        //We send this information to the animator, which handles the transition between animations
-        //We send the Absolute (= Always positive) value of horizontalInput, so even when cherecter moves left, his animation plays
-        anim.SetFloat("MoveSpeed", Mathf.Abs(horizontalInput * speed));
+        if (isWallSliding)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, wallSlideSpeed, float.MaxValue));
+        }
 
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset, collisionRadius);
+        Gizmos.DrawWireSphere((Vector2)transform.position + leftOffset, collisionRadius);
     }
 
     protected void Jump()
     {
+        isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
+        if (isGrounded == true && Input.GetKeyDown(KeyCode.Space) || isWallSliding && Input.GetKeyDown(KeyCode.Space))
+        {
+            isJumping = true;
+            jumpTimeCounter = jumpTime;
+            rb.velocity = Vector2.up * jumpForce;
+        }
 
+        if (Input.GetKey(KeyCode.Space) && isJumping == true)
+        {
+            if (jumpTimeCounter > 0)
+            {
+                rb.velocity = Vector2.up * jumpForce;
+                jumpTimeCounter -= Time.deltaTime;
+            }
+            else
+            {
+                isJumping = false;
+            }
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            isJumping = false;
+        }
     }
-
-    //Returns whether or not cherecter is on the ground
-    protected bool IsGrounded()
-    {
-        return false;
-    }
-
-    //I do not want to use 'flip x' because my fire point will not filp with character
-    private void Flip()
-    {
-        m_FacingRight = !m_FacingRight;
-        //if put camera in children, camera view will change. so i have to let the camera follow the character.
-        transform.Rotate(0f, 180f, 0f);
-    }
-
 }
