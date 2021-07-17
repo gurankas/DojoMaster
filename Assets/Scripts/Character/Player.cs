@@ -10,6 +10,7 @@ public class Player : BaseCharacter
 
     static float health;
     public BoxCollider2D player;
+    public Animator animator;
 
     public LayerMask whatIsGround;
     public bool isGrounded;
@@ -31,7 +32,6 @@ public class Player : BaseCharacter
     public float leaveWallJumpTime = 0.2f;
     private float wallJumpTime;
     public float wallSlideSpeed = 0.5f;
-    public float wallDistance = 0.5f;
     private bool isWallSliding = false;
 
 
@@ -51,41 +51,21 @@ public class Player : BaseCharacter
 
         Move(runInput);
 
+        animator.SetFloat("Speed", Mathf.Abs(runInput));
+        animator.SetBool("IsGrounded", isGrounded);
     }
 
     private void Update()
     {
 
+        WallCheck();
+
         Jump();
-
-        //wall check
-
-        onWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, whatIsWall) || Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, whatIsWall);
-        onRightWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, whatIsWall);
-        onLeftWall = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, whatIsWall);
-        side = onRightWall ? 1 : -1;
-
-
-        if (onWall && !isGrounded && runInput != 0)
-        {
-            isWallSliding = true;
-            wallJumpTime = Time.time + leaveWallJumpTime;
-        }
-        else if (wallJumpTime < Time.time)
-        {
-            isWallSliding = false;
-        }
-
-        if (isWallSliding)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, wallSlideSpeed, float.MaxValue));
-        }
-
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = Color.gray;
         Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset, collisionRadius);
         Gizmos.DrawWireSphere((Vector2)transform.position + leftOffset, collisionRadius);
     }
@@ -96,6 +76,8 @@ public class Player : BaseCharacter
         if (isGrounded == true && Input.GetKeyDown(KeyCode.Space) || isWallSliding && Input.GetKeyDown(KeyCode.Space))
         {
             isJumping = true;
+            animator.SetBool("IsJumping", true);
+
             jumpTimeCounter = jumpTime;
             rb.velocity = Vector2.up * jumpForce;
         }
@@ -115,6 +97,35 @@ public class Player : BaseCharacter
         if (Input.GetKeyUp(KeyCode.Space))
         {
             isJumping = false;
+            animator.SetBool("IsJumping", false);
+        }
+    }
+
+    private void WallCheck()
+    {
+        //wall check
+
+        onWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, whatIsWall) || Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, whatIsWall);
+        onRightWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, whatIsWall);
+        onLeftWall = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, whatIsWall);
+        side = onRightWall ? 1 : -1;
+
+
+        if (onWall && !isGrounded && runInput != 0)
+        {
+            isWallSliding = true;
+            animator.SetBool("IsWallSliding", true);
+            wallJumpTime = Time.time + leaveWallJumpTime;
+        }
+        else if (wallJumpTime < Time.time)
+        {
+            isWallSliding = false;
+            animator.SetBool("IsWallSliding", false);
+        }
+
+        if (isWallSliding)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, wallSlideSpeed, float.MaxValue));
         }
     }
 }

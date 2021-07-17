@@ -4,7 +4,6 @@ public class BaseCharacter : MonoBehaviour
 {
     public Rigidbody2D rb;
     SpriteRenderer sr;
-    Animator anim;
 
     public float speed = 5;
     // bool value about flip character
