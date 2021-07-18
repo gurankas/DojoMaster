@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class BaseCharacter : MonoBehaviour
 {
+    [HideInInspector]
     public Rigidbody2D rb;
-    SpriteRenderer sr;
 
     public float speed = 5;
     // bool value about flip character
@@ -17,13 +17,7 @@ public class BaseCharacter : MonoBehaviour
 
     public void OnEnable()
     {
-
         rb = GetComponent<Rigidbody2D>();
-
-        sr = GetComponent<SpriteRenderer>();
-
-        //anim = GetComponent<Animator>();
-
     }
 
     protected void Move(float horizontalInput)

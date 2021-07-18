@@ -533,7 +533,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 5
 --- !u!212 &974114847
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1364,7 +1364,6 @@ GameObject:
   - component: {fileID: 1977865509}
   - component: {fileID: 1977865508}
   - component: {fileID: 1977865513}
-  - component: {fileID: 1977865514}
   - component: {fileID: 1977865512}
   m_Layer: 0
   m_Name: SamplePlayer
@@ -1505,25 +1504,30 @@ MonoBehaviour:
   jumpForce: 10
   feetPos: {fileID: 914066338}
   checkRadius: 0.4
-  player: {fileID: 1977865509}
   animator: {fileID: 1977865513}
+  whatIsWall:
+    serializedVersion: 2
+    m_Bits: 512
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
   isGrounded: 0
-  jumpTime: 0.3
-  whatIsWall:
-    serializedVersion: 2
-    m_Bits: 512
   onWall: 0
-  onRightWall: 0
   onLeftWall: 0
-  side: 0
+  onRightWall: 0
+  isAttacking: 0
+  jumpTime: 0.3
   collisionRadius: 0.25
   rightOffset: {x: 0.6, y: 1}
   leftOffset: {x: -0.6, y: 1}
   leaveWallJumpTime: 0.1
   wallSlideSpeed: 0.1
+  attackPoint: {fileID: 1071083464}
+  attackRange: 0.5
+  whatIsEnemy:
+    serializedVersion: 2
+    m_Bits: 1024
+  attackCoolDown: 0.25
 --- !u!95 &1977865513
 Animator:
   serializedVersion: 3
@@ -1543,21 +1547,3 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1977865514
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1977865507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a58345a3f25bc034f89991c5510737c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 1977865513}
-  attackPoint: {fileID: 1071083464}
-  attackRange: 0.6
-  whatIsEnemy:
-    serializedVersion: 2
-    m_Bits: 1024
