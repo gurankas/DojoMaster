@@ -87,7 +87,8 @@ public class Player : BaseCharacter
     protected void Jump()
     {
         isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
-        if (isGrounded == true && Input.GetKeyDown(KeyCode.Space) || isWallSliding && Input.GetKeyDown(KeyCode.Space))
+
+        if (isGrounded == true && Input.GetButtonDown("Jump") || isWallSliding && Input.GetButtonDown("Jump"))
         {
             isJumping = true;
             isWallSliding = false;
@@ -97,7 +98,7 @@ public class Player : BaseCharacter
             rb.velocity = Vector2.up * jumpForce;
         }
 
-        if (Input.GetKey(KeyCode.Space) && isJumping == true)
+        if (Input.GetButton("Jump") && isJumping == true)
         {
             if (jumpTimeCounter > 0)
             {
@@ -110,7 +111,7 @@ public class Player : BaseCharacter
                 animator.SetBool("IsJumping", false);
             }
         }
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetButtonUp("Jump"))
         {
             isJumping = false;
             animator.SetBool("IsJumping", false);
@@ -158,7 +159,7 @@ public class Player : BaseCharacter
 
     void Attack()
     {
-        if (Input.GetMouseButtonDown(0) && isGrounded && !isAttacking)
+        if (Input.GetButtonDown("Fire1") && isGrounded && !isAttacking)
         {
             isAttacking = true;
             attackTime = attackCoolDown;
