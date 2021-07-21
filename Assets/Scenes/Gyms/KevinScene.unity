@@ -1510,7 +1510,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1611894400}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.74, y: 8.56, z: 0.8771654}
+  m_LocalPosition: {x: -7.74, y: 8.588, z: 0.8771654}
   m_LocalScale: {x: 5.177393, y: 0.8447, z: 1}
   m_Children: []
   m_Father: {fileID: 1682137283}
@@ -2200,6 +2200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
   speed: 5
+  m_FacingRight: 1
   jumpForce: 12
   feetPos: {fileID: 914066338}
   checkRadius: 0.4
@@ -2227,6 +2228,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   attackCoolDown: 0.35
+  rollForce: 25
+  startRollTime: 0.1
 --- !u!95 &1977865513
 Animator:
   serializedVersion: 3

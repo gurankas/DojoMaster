@@ -44,37 +44,41 @@ public class Player : BaseCharacter
     public float attackCoolDown;
     private float attackTime;
 
-    private void FixedUpdate()
-    {
-        //movement
-        runInput = Input.GetAxisRaw("Horizontal");
+    //roll
 
-        if (!isAttacking)
-        {
-            Move(runInput);
+    public float rollForce;
+    public float startRollTime;
+    private float currentRollTime;
+    private float rollDirection;
+    private bool isRolling = false;
 
-        }
-
-        animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
-        animator.SetBool("IsGrounded", isGrounded);
-    }
 
     private void Update()
     {
+        //animation
+        animator.SetFloat("Speed", Mathf.Abs(runInput));
+        animator.SetBool("IsGrounded", isGrounded);
+
+        //movement
+        runInput = Input.GetAxisRaw("Horizontal");
+
         Attack();
 
-        if (!isAttacking)
+        Roll();
+        if (!isAttacking && !isRolling)
         {
-            WallCheck();
-
+            Move(runInput);
             Jump();
+            WallCheck();
         }
+
 
         //adding restart if needed during demonstration
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+
     }
 
     private void OnDrawGizmos()
@@ -100,14 +104,16 @@ public class Player : BaseCharacter
             animator.SetBool("IsJumping", true);
 
             jumpTimeCounter = jumpTime;
-            rb.velocity = Vector2.up * jumpForce;
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            // rb.velocity = Vector2.up * jumpForce;
         }
 
         if (Input.GetButton("Jump") && isJumping == true)
         {
             if (jumpTimeCounter > 0)
             {
-                rb.velocity = Vector2.up * jumpForce;
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                // rb.velocity = Vector2.up * jumpForce;
                 jumpTimeCounter -= Time.deltaTime;
             }
             else
@@ -162,9 +168,9 @@ public class Player : BaseCharacter
         }
     }
 
-    void Attack()
+    private void Attack()
     {
-        if (Input.GetButtonDown("Fire1") && isGrounded && !isAttacking)
+        if (Input.GetButtonDown("Fire1") && isGrounded && !isAttacking && !isRolling)
         {
             isAttacking = true;
             attackTime = attackCoolDown;
@@ -174,6 +180,7 @@ public class Player : BaseCharacter
             animator.SetTrigger("Attack");
 
             Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, whatIsEnemy);
+
             foreach (Collider2D enemy in hitEnemies)
             {
                 Debug.Log("We Hit" + enemy.name);
@@ -192,4 +199,33 @@ public class Player : BaseCharacter
             attackTime -= Time.deltaTime;
         }
     }
+
+
+    private void Roll()
+    {
+
+        if (Input.GetButtonDown("Fire2") && isGrounded && runInput != 0 && !isAttacking)
+        {
+            isRolling = true;
+            animator.SetBool("IsRolling", true);
+            currentRollTime = startRollTime;
+            rb.velocity = Vector2.zero;
+            rollDirection = runInput;
+        }
+
+        if (isRolling)
+        {
+            rb.velocity = Vector2.right * rollDirection * rollForce;
+
+            currentRollTime -= Time.deltaTime;
+
+            if (currentRollTime <= 0)
+            {
+                isRolling = false;
+                animator.SetBool("IsRolling", false);
+            }
+        }
+    }
+
 }
+

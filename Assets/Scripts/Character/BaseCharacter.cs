@@ -6,8 +6,9 @@ public class BaseCharacter : MonoBehaviour
     public Rigidbody2D rb;
 
     public float speed = 5;
+
     // bool value about flip character
-    private bool m_FacingRight = true;
+    public bool m_FacingRight = true;
 
     public float jumpForce;
     public Transform feetPos;
