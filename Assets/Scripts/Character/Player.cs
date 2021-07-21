@@ -70,6 +70,11 @@ public class Player : BaseCharacter
             Jump();
         }
 
+        //adding restart if needed during demonstration
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
     private void OnDrawGizmos()
