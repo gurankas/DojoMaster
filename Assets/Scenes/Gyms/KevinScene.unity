@@ -275,6 +275,7 @@ GameObject:
   - component: {fileID: 409872251}
   - component: {fileID: 409872250}
   - component: {fileID: 409872249}
+  - component: {fileID: 409872253}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -403,6 +404,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &409872253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409872248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2b3e1a308248f4985be5529da95ac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  speed: 5
+  m_FacingRight: 1
+  jumpForce: 0
+  feetPos: {fileID: 0}
+  checkRadius: 0
+  _distanceForLongRangeAttacks: 5
+  _attacksPerPhase: []
 --- !u!1 &568281159
 GameObject:
   m_ObjectHideFlags: 0
@@ -2229,7 +2250,7 @@ MonoBehaviour:
     m_Bits: 1024
   attackCoolDown: 0.35
   rollForce: 25
-  startRollTime: 0.1
+  startRollTime: 0.2
 --- !u!95 &1977865513
 Animator:
   serializedVersion: 3

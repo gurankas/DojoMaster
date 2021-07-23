@@ -1,24 +1,71 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+
+
+[Serializable]
+public struct PhaseAttackMapping
+{
+    public Phases phases;
+    public State attack;
+}
+
+public enum State
+{
+    Idle,
+    Phase1_LongRange_Desc,
+    Phase1_ShortRange_Desc,
+    Phase2_LongRange_Desc,
+    Phase2_ShortRange_Desc,
+    Phase3_LongRange_Desc,
+    Phase3_ShortRange_Desc,
+}
+
+public enum Phases
+{
+    Phase1,
+    Phase2
+}
 
 public class Boss : BaseCharacter
 {
-    public enum State
-    {
-        Idle,
-        Phase1_LongRange_Desc,
-        Phase1_ShortRange_Desc,
-        Phase2_LongRange_Desc,
-        Phase2_ShortRange_Desc,
-        Phase3_LongRange_Desc,
-        Phase3_ShortRange_Desc,
-    }
+    [SerializeField]
+    private float _distanceForLongRangeAttacks = 5;
+
+    [SerializeField]
+    private List<PhaseAttackMapping> _attacksPerPhase;
 
     private State _currentState = State.Idle;
+    private Player _playerRef;
+    private Phases _currentPhase = Phases.Phase1;
+    private bool _tempChangeStateTrigger = true;
 
     private void Start()
     {
         SetState(State.Idle);
+    }
+
+    private void OnDrawGizmos()
+    {
+        //helps visualize the state of the AI
+        Handles.Label(transform.position + new Vector3(0, 2, 0), $"{_currentState}");
+    }
+
+    //helper function to choose attack based on phase
+    private State ChooseAttack()
+    {
+        List<State> availableAttacks = new List<State>();
+        foreach (var attacks in _attacksPerPhase)
+        {
+            if (attacks.phases == _currentPhase)
+            {
+                availableAttacks.Add(attacks.attack);
+            }
+        }
+        int randomInt = UnityEngine.Random.Range(0, availableAttacks.Count);
+        return availableAttacks[randomInt];
     }
 
     private void SetState(State newState)
