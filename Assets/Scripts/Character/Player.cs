@@ -126,7 +126,7 @@ public class Player : BaseCharacter
 
             jumpTimeCounter = jumpTime;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            // rb.velocity = Vector2.up * jumpForce;
+
         }
 
         if (Input.GetButton("Jump") && isJumping == true)
@@ -134,7 +134,7 @@ public class Player : BaseCharacter
             if (jumpTimeCounter > 0)
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-                // rb.velocity = Vector2.up * jumpForce;
+
                 jumpTimeCounter -= Time.deltaTime;
             }
             else
@@ -194,8 +194,6 @@ public class Player : BaseCharacter
         if (Input.GetButtonDown("Fire1") && !isAttacking && !isRolling && !isWallSliding)
         {
 
-
-
             if (isJumping)
             {
                 isJumping = false;
@@ -229,10 +227,10 @@ public class Player : BaseCharacter
             attackTime -= Time.deltaTime;
         }
 
-        if (isAttacking)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, 0.8f, float.MaxValue));
-        }
+        // if (isAttacking)
+        // {
+        //     rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, 0.8f, float.MaxValue));
+        // }
 
     }
 
