@@ -417,11 +417,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
-  speed: 5
+  Space: 10
   m_FacingRight: 1
-  jumpForce: 0
+  runSpeed: 5
   feetPos: {fileID: 0}
-  checkRadius: 0
+  jumpCheckRadius: 0
+  jumpForce: 0
   _distanceForLongRangeAttacks: 5
   _attacksPerPhase: []
 --- !u!1 &568281159
@@ -734,7 +735,7 @@ GameObject:
   m_Layer: 0
   m_Name: FeetPos
   m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1046,7 +1047,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1071083463}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.058, y: 0.247, z: -3.0365448}
+  m_LocalPosition: {x: 0.136, y: 0.229, z: -3.0365448}
   m_LocalScale: {x: 0.19745675, y: 0.19745675, z: 0.19745675}
   m_Children: []
   m_Father: {fileID: 1977865511}
@@ -2220,37 +2221,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
-  speed: 5
+  Space: 10
   m_FacingRight: 1
-  jumpForce: 12
+  runSpeed: 5
   feetPos: {fileID: 914066338}
-  checkRadius: 0.4
-  animator: {fileID: 1977865513}
+  jumpCheckRadius: 0.05
+  jumpForce: 12
+  jumpTime: 0.3
+  wallCheckRadius: 0.11
+  rightOffset: {x: 0.55, y: 1}
+  leftOffset: {x: -0.55, y: 1}
+  wallSlideSpeed: 0.1
+  leaveWallJumpTime: 0.1
+  attackPoint: {fileID: 1071083464}
+  attackRadius: 0.5
+  attackCoolDown: 0.35
+  rollForce: 20
+  rollTime: 0.2
   whatIsWall:
     serializedVersion: 2
     m_Bits: 512
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
-  isGrounded: 0
-  onWall: 0
-  onLeftWall: 0
-  onRightWall: 0
-  isAttacking: 0
-  jumpTime: 0.3
-  collisionRadius: 0.25
-  rightOffset: {x: 0.6, y: 1}
-  leftOffset: {x: -0.6, y: 1}
-  leaveWallJumpTime: 0.1
-  wallSlideSpeed: 0.1
-  attackPoint: {fileID: 1071083464}
-  attackRange: 0.5
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 1024
-  attackCoolDown: 0.35
-  rollForce: 25
-  startRollTime: 0.2
 --- !u!95 &1977865513
 Animator:
   serializedVersion: 3

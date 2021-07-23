@@ -5,16 +5,20 @@ public class BaseCharacter : MonoBehaviour
     [HideInInspector]
     public Rigidbody2D rb;
 
-    public float speed = 5;
+    [HideInInspector]
+    public int Space = 10;
 
-    // bool value about flip character
+    [HideInInspector]
     public bool m_FacingRight = true;
 
-    public float jumpForce;
+
+    public float runSpeed = 5;
+
+    [Space]
+    [Header("Jump Raycast-----------------------------------------------------")]
     public Transform feetPos;
-    public float checkRadius;
-
-
+    public float jumpCheckRadius;
+    public float jumpForce;
 
     public void OnEnable()
     {
@@ -25,7 +29,7 @@ public class BaseCharacter : MonoBehaviour
     {
         //We set the velocity based on the input of the player
         //We set the y to rb.velocity.y, because if we set it to 0 our object does not move down with gravity
-        rb.velocity = new Vector2(horizontalInput * speed, rb.velocity.y);
+        rb.velocity = new Vector2(horizontalInput * runSpeed, rb.velocity.y);
 
         //If moving left...
         if (horizontalInput > 0 && !m_FacingRight)
@@ -54,5 +58,4 @@ public class BaseCharacter : MonoBehaviour
         transform.Rotate(0f, 180f, 0f);
     }
 
-    
 }

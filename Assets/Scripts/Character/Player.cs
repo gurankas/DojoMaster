@@ -6,51 +6,74 @@ using UnityEngine.UI;
 
 public class Player : BaseCharacter
 {
-    float runInput;
-
-    public Animator animator;
-
-    //LayerMask
-    public LayerMask whatIsWall;
-    public LayerMask whatIsGround;
-
-    public bool isGrounded;
-    public bool onWall;
-    public bool onLeftWall;
-    public bool onRightWall;
-    public bool isAttacking = false;
-
-    //Jump state check
-    private float jumpTimeCounter;
     public float jumpTime;
-    private bool isJumping;
 
-    //wallSlide state Check
-    public float collisionRadius;
+
+    //wallSlide state Check 
+    [Space]
+    [Header("Wall check-----------------------------------------------------")]
+    public float wallCheckRadius;
     public Vector2 rightOffset;
     public Vector2 leftOffset;
-
-    //onWall check
-    public float leaveWallJumpTime = 0.2f;
-    private float wallJumpTime;
     public float wallSlideSpeed = 0.5f;
-    private bool isWallSliding = false;
+
+    [Tooltip("Reaction time that allow player jump after leave wall")]
+    public float leaveWallJumpTime = 0.2f;
+
 
     // attack check
+    [Space]
+    [Header("Attack check-----------------------------------------------------")]
     public Transform attackPoint;
-    public float attackRange = 0.5f;
+    public float attackRadius = 0.5f;
+    public float attackCoolDown;
+
+
+    //wallSlide state Check 
+    [Space]
+    [Header("Roll-----------------------------------------------------")]
+    public float rollForce;
+    public float rollTime;
+
+
+    //LayerMask
+    [Space]
+    [Header("Layer Setting")]
+    public LayerMask whatIsWall;
+    public LayerMask whatIsGround;
     public LayerMask whatIsEnemy;
 
-    public float attackCoolDown;
+
+    //checks
+    //ground check
+    private bool isGrounded;
+    //attack check
+    private bool isAttacking = false;
+    //jump check
+    private bool isJumping;
+    //onWall check
+    private bool onWall;
+    private bool onLeftWall;
+    private bool onRightWall;
+    private bool isWallSliding = false;
+
+    //jump 
+    private float jumpTimeCounter;
+    //wall
+    private float wallJumpTime;
+    //attack
     private float attackTime;
-
     //roll
-
-    public float rollForce;
-    public float startRollTime;
     private float currentRollTime;
     private float rollDirection;
     private bool isRolling = false;
+    //movement
+    private float runInput;
+
+
+    //animation
+    private Animator animator;
+
 
 
     private void Update()
@@ -85,17 +108,17 @@ public class Player : BaseCharacter
     {
         //ground check 
         Gizmos.color = Color.gray;
-        Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset, collisionRadius);
-        Gizmos.DrawWireSphere((Vector2)transform.position + leftOffset, collisionRadius);
+        Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset, wallCheckRadius);
+        Gizmos.DrawWireSphere((Vector2)transform.position + leftOffset, wallCheckRadius);
 
         //attack check
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
     }
 
     protected void Jump()
     {
-        isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
+        isGrounded = Physics2D.OverlapCircle(feetPos.position, jumpCheckRadius, whatIsGround);
 
         if (isGrounded == true && Input.GetButtonDown("Jump") || isWallSliding && Input.GetButtonDown("Jump"))
         {
@@ -132,11 +155,11 @@ public class Player : BaseCharacter
     private void WallCheck()
     {
         //wall check
-        onWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, whatIsWall) || Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, whatIsWall);
-        onRightWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, whatIsWall);
-        onLeftWall = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, whatIsWall);
+        onWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, wallCheckRadius, whatIsWall) || Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, wallCheckRadius, whatIsWall);
+        onRightWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, wallCheckRadius, whatIsWall);
+        onLeftWall = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, wallCheckRadius, whatIsWall);
 
-        if (onWall && !isGrounded && runInput != 0)
+        if (onWall && !isGrounded)
         {
             isWallSliding = true;
 
@@ -149,11 +172,11 @@ public class Player : BaseCharacter
 
         //for animation
 
-        if (onRightWall && !isGrounded && runInput > 0)
+        if (onRightWall && !isGrounded)
         {
             animator.SetBool("IsWallSliding", true);
         }
-        else if (onLeftWall && !isGrounded && runInput < 0)
+        else if (onLeftWall && !isGrounded)
         {
             animator.SetBool("IsWallSliding", true);
         }
@@ -170,8 +193,17 @@ public class Player : BaseCharacter
 
     private void Attack()
     {
-        if (Input.GetButtonDown("Fire1") && isGrounded && !isAttacking && !isRolling)
+        if (Input.GetButtonDown("Fire1") && !isAttacking && !isRolling && !isWallSliding)
         {
+
+
+
+            if (isJumping)
+            {
+                isJumping = false;
+                animator.SetBool("IsJumping", false);
+            }
+
             isAttacking = true;
             attackTime = attackCoolDown;
 
@@ -179,7 +211,7 @@ public class Player : BaseCharacter
 
             animator.SetTrigger("Attack");
 
-            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, whatIsEnemy);
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsEnemy);
 
             foreach (Collider2D enemy in hitEnemies)
             {
@@ -198,17 +230,23 @@ public class Player : BaseCharacter
         {
             attackTime -= Time.deltaTime;
         }
+
+        if (isAttacking)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, 0.8f, float.MaxValue));
+        }
+
     }
 
 
     private void Roll()
     {
 
-        if (Input.GetButtonDown("Fire2") && isGrounded && runInput != 0 && !isAttacking)
+        if (Input.GetButtonDown("Fire3") && isGrounded && runInput != 0 && !isAttacking)
         {
             isRolling = true;
             animator.SetBool("IsRolling", true);
-            currentRollTime = startRollTime;
+            currentRollTime = rollTime;
             rb.velocity = Vector2.zero;
             rollDirection = runInput;
         }
