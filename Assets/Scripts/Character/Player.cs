@@ -203,7 +203,7 @@ public class Player : BaseCharacter
             isAttacking = true;
             attackTime = attackCoolDown;
 
-            rb.velocity = new Vector2(0, 0);
+            rb.velocity = new Vector2(0, rb.velocity.y);
 
             animator.SetTrigger("Attack");
 
