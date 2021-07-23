@@ -11,8 +11,8 @@ public class BaseCharacter : MonoBehaviour
     [HideInInspector]
     public bool m_FacingRight = true;
 
-
     public float runSpeed = 5;
+    public Animator animator;
 
     [Space]
     [Header("Jump Raycast-----------------------------------------------------")]

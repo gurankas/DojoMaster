@@ -8,13 +8,12 @@ public class Player : BaseCharacter
 {
     public float jumpTime;
 
-
     //wallSlide state Check 
     [Space]
     [Header("Wall check-----------------------------------------------------")]
-    public float wallCheckRadius;
     public Vector2 rightOffset;
     public Vector2 leftOffset;
+    public float wallCheckRadius;
     public float wallSlideSpeed = 0.5f;
 
     [Tooltip("Reaction time that allow player jump after leave wall")]
@@ -65,14 +64,12 @@ public class Player : BaseCharacter
     private float attackTime;
     //roll
     private float currentRollTime;
-    private float rollDirection;
     private bool isRolling = false;
     //movement
     private float runInput;
 
 
-    //animation
-    private Animator animator;
+
 
 
 
@@ -88,6 +85,7 @@ public class Player : BaseCharacter
         Attack();
 
         Roll();
+
         if (!isAttacking && !isRolling)
         {
             Move(runInput);
@@ -242,18 +240,24 @@ public class Player : BaseCharacter
     private void Roll()
     {
 
-        if (Input.GetButtonDown("Fire3") && isGrounded && runInput != 0 && !isAttacking)
+        if (Input.GetButtonDown("Fire3") && isGrounded && !isAttacking && !isRolling)
         {
             isRolling = true;
             animator.SetBool("IsRolling", true);
             currentRollTime = rollTime;
             rb.velocity = Vector2.zero;
-            rollDirection = runInput;
         }
 
         if (isRolling)
         {
-            rb.velocity = Vector2.right * rollDirection * rollForce;
+            if (m_FacingRight)
+            {
+                rb.velocity = Vector2.right * rollForce;
+            }
+            else
+            {
+                rb.velocity = Vector2.left * rollForce;
+            }
 
             currentRollTime -= Time.deltaTime;
 

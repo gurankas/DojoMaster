@@ -420,6 +420,7 @@ MonoBehaviour:
   Space: 10
   m_FacingRight: 1
   runSpeed: 5
+  animator: {fileID: 0}
   feetPos: {fileID: 0}
   jumpCheckRadius: 0
   jumpForce: 0
@@ -2224,20 +2225,21 @@ MonoBehaviour:
   Space: 10
   m_FacingRight: 1
   runSpeed: 5
+  animator: {fileID: 1977865513}
   feetPos: {fileID: 914066338}
   jumpCheckRadius: 0.05
   jumpForce: 12
   jumpTime: 0.3
-  wallCheckRadius: 0.11
   rightOffset: {x: 0.55, y: 1}
   leftOffset: {x: -0.55, y: 1}
+  wallCheckRadius: 0.11
   wallSlideSpeed: 0.1
   leaveWallJumpTime: 0.1
   attackPoint: {fileID: 1071083464}
   attackRadius: 0.5
   attackCoolDown: 0.35
   rollForce: 20
-  rollTime: 0.2
+  rollTime: 0.3
   whatIsWall:
     serializedVersion: 2
     m_Bits: 512
