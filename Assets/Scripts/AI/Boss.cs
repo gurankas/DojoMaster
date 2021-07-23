@@ -40,6 +40,7 @@ public class Boss : BaseCharacter
     private State _currentState = State.Idle;
     private Player _playerRef;
     private Phases _currentPhase = Phases.Phase1;
+    //serves as exit condition from each state for now
     private bool _tempChangeStateTrigger = true;
 
     private void Start()
@@ -51,6 +52,11 @@ public class Boss : BaseCharacter
     {
         //helps visualize the state of the AI
         Handles.Label(transform.position + new Vector3(0, 2, 0), $"{_currentState}");
+    }
+
+    private void ToggleStateChangeTrigger()
+    {
+        _tempChangeStateTrigger = !_tempChangeStateTrigger;
     }
 
     //helper function to choose attack based on phase
@@ -68,12 +74,27 @@ public class Boss : BaseCharacter
         return availableAttacks[randomInt];
     }
 
+    private void Update()
+    {
+        //artifically triggering phase change
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            SetPhase(Phases.Phase2);
+        }
+    }
+
+    private void SetPhase(Phases newPhase)
+    {
+        _currentPhase = newPhase;
+    }
+
     private void SetState(State newState)
     {
         //before we switch state, we should stop our current state
         StopAllCoroutines();
 
         _currentState = newState;
+        Debug.Log(newState);
         //based on the state, we start a different coroutine
         switch (_currentState)
         {
@@ -118,77 +139,99 @@ public class Boss : BaseCharacter
     IEnumerator OnIdle()
     {
         //this is 'Start' of this state
-        yield return new WaitForSeconds(0.0f);
-        while (true)
+        yield return new WaitForSeconds(0f);
+        Invoke("ToggleStateChangeTrigger", 2f);
+
+        while (_tempChangeStateTrigger)
         {
             //this is fixedupdate for this state
             yield return new WaitForFixedUpdate();
         }
+        ToggleStateChangeTrigger();
+        SetState(ChooseAttack());
     }
 
     IEnumerator OnPhase3_ShortRange_Desc()
     {
         //this is 'Start' of this state
         yield return new WaitForSeconds(0.0f);
-        while (true)
+        Invoke("ToggleStateChangeTrigger", 2f);
+        while (_tempChangeStateTrigger)
         {
             //this is fixedupdate for this state
             yield return new WaitForFixedUpdate();
         }
+        ToggleStateChangeTrigger();
+        SetState(ChooseAttack());
     }
 
     IEnumerator OnPhase3_LongRange_Desc()
     {
         //this is 'Start' of this state
         yield return new WaitForSeconds(0.0f);
-        while (true)
+        Invoke("ToggleStateChangeTrigger", 2f);
+        while (_tempChangeStateTrigger)
         {
             //this is fixedupdate for this state
             yield return new WaitForFixedUpdate();
         }
+        ToggleStateChangeTrigger();
+        SetState(ChooseAttack());
     }
 
     IEnumerator OnPhase2_ShortRange_Desc()
     {
         //this is 'Start' of this state
         yield return new WaitForSeconds(0.0f);
-        while (true)
+        Invoke("ToggleStateChangeTrigger", 2f);
+        while (_tempChangeStateTrigger)
         {
             //this is fixedupdate for this state
             yield return new WaitForFixedUpdate();
         }
+        ToggleStateChangeTrigger();
+        SetState(ChooseAttack());
     }
 
     IEnumerator OnPhase2_LongRange_Desc()
     {
         //this is 'Start' of this state
         yield return new WaitForSeconds(0.0f);
-        while (true)
+        Invoke("ToggleStateChangeTrigger", 2f);
+        while (_tempChangeStateTrigger)
         {
             //this is fixedupdate for this state
             yield return new WaitForFixedUpdate();
         }
+        ToggleStateChangeTrigger();
+        SetState(ChooseAttack());
     }
 
     IEnumerator OnPhase1_ShortRange_Desc()
     {
         //this is 'Start' of this state
         yield return new WaitForSeconds(0.0f);
-        while (true)
+        Invoke("ToggleStateChangeTrigger", 2f);
+        while (_tempChangeStateTrigger)
         {
             //this is fixedupdate for this state
             yield return new WaitForFixedUpdate();
         }
+        ToggleStateChangeTrigger();
+        SetState(ChooseAttack());
     }
 
     IEnumerator OnPhase1_LongRange_Desc()
     {
         //this is 'Start' of this state
         yield return new WaitForSeconds(0.0f);
-        while (true)
+        Invoke("ToggleStateChangeTrigger", 2f);
+        while (_tempChangeStateTrigger)
         {
             //this is fixedupdate for this state
             yield return new WaitForFixedUpdate();
         }
+        ToggleStateChangeTrigger();
+        SetState(ChooseAttack());
     }
 }
