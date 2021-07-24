@@ -13,11 +13,13 @@ public class Player : BaseCharacter
     [Header("Wall check-----------------------------------------------------")]
     public Vector2 rightOffset;
     public Vector2 leftOffset;
+
     public float wallCheckRadius;
-    public float wallSlideSpeed = 0.5f;
+    public float wallSlideSpeed;
+    public float wallJumpCoolDown;
 
     [Tooltip("Reaction time that allow player jump after leave wall")]
-    public float leaveWallJumpTime = 0.2f;
+    public float wallJumpReactionTime;
 
 
     // attack check
@@ -28,7 +30,7 @@ public class Player : BaseCharacter
     public float attackCoolDown;
 
 
-    //wallSlide state Check 
+    //roll state Check 
     [Space]
     [Header("Roll-----------------------------------------------------")]
     public float rollForce;
@@ -55,23 +57,28 @@ public class Player : BaseCharacter
     private bool onLeftWall;
     private bool onRightWall;
     private bool isWallSliding = false;
+    private bool isInWallJumpCoolDown;
+    //roll check
+    private bool isRolling = false;
 
     //jump 
     private float jumpTimeCounter;
     //wall
     private float wallJumpTime;
+    private float wallJumpCoolDownCounter;
+    private int previousWall;
     //attack
     private float attackTime;
     //roll
     private float currentRollTime;
-    private bool isRolling = false;
     //movement
     private float runInput;
 
 
-
-
-
+    private void Start()
+    {
+        wallJumpCoolDownCounter = wallJumpCoolDown;
+    }
 
     private void Update()
     {
@@ -118,7 +125,61 @@ public class Player : BaseCharacter
     {
         isGrounded = Physics2D.OverlapCircle(feetPos.position, jumpCheckRadius, whatIsGround);
 
-        if (isGrounded == true && Input.GetButtonDown("Jump") || isWallSliding && Input.GetButtonDown("Jump"))
+        //wallJump cooldown
+        if (!isInWallJumpCoolDown)
+        {
+            if (isWallSliding && Input.GetButtonDown("Jump"))
+            {
+                //store previous wall side
+                if (onLeftWall)
+                {
+                    previousWall = -1;
+                }
+                else if (onRightWall)
+                {
+                    previousWall = 1;
+                }
+
+                //jump
+                isJumping = true;
+                isWallSliding = false;
+                animator.SetBool("IsJumping", true);
+
+                jumpTimeCounter = jumpTime;
+
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+
+                isInWallJumpCoolDown = true;
+
+            }
+        }
+        else
+        {
+            //check if new wall side same with previous wall side
+            if (onLeftWall && previousWall == 1)
+            {
+                wallJumpCoolDownCounter = wallJumpCoolDown;
+                isInWallJumpCoolDown = false;
+            }
+            else if (onRightWall && previousWall == -1)
+            {
+                wallJumpCoolDownCounter = wallJumpCoolDown;
+                isInWallJumpCoolDown = false;
+            }
+            //wall jump cool down on same wall side
+            else if (wallJumpCoolDownCounter > 0)
+            {
+                wallJumpCoolDownCounter -= Time.deltaTime;
+            }
+            else if (wallJumpCoolDownCounter <= 0)
+            {
+                wallJumpCoolDownCounter = wallJumpCoolDown;
+                isInWallJumpCoolDown = false;
+            }
+        }
+
+        //jump
+        if (isGrounded == true && Input.GetButtonDown("Jump"))
         {
             isJumping = true;
             isWallSliding = false;
@@ -129,6 +190,7 @@ public class Player : BaseCharacter
 
         }
 
+        //hold 'space bar' jump higher
         if (Input.GetButton("Jump") && isJumping == true)
         {
             if (jumpTimeCounter > 0)
@@ -161,7 +223,7 @@ public class Player : BaseCharacter
         {
             isWallSliding = true;
 
-            wallJumpTime = Time.time + leaveWallJumpTime;
+            wallJumpTime = Time.time + wallJumpReactionTime;
         }
         else if (wallJumpTime < Time.time)
         {
