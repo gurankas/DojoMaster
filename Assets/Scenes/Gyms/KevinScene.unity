@@ -425,7 +425,19 @@ MonoBehaviour:
   jumpCheckRadius: 0
   jumpForce: 0
   _distanceForLongRangeAttacks: 5
-  _attacksPerPhase: []
+  _attacksPerPhase:
+  - phases: 0
+    attack: 1
+  - phases: 0
+    attack: 2
+  - phases: 1
+    attack: 3
+  - phases: 1
+    attack: 4
+  - phases: 0
+    attack: 0
+  - phases: 1
+    attack: 0
 --- !u!1 &568281159
 GameObject:
   m_ObjectHideFlags: 0

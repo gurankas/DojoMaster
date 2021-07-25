@@ -83,8 +83,8 @@ public class Player : BaseCharacter
     private void Update()
     {
         //animation
-        animator.SetFloat("Speed", Mathf.Abs(runInput));
-        animator.SetBool("IsGrounded", isGrounded);
+        _anim.SetFloat("Speed", Mathf.Abs(runInput));
+        _anim.SetBool("IsGrounded", isGrounded);
 
         //movement
         runInput = Input.GetAxisRaw("Horizontal");
@@ -147,7 +147,7 @@ public class Player : BaseCharacter
 
                 jumpTimeCounter = jumpTime;
 
-                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
 
                 isInWallJumpCoolDown = true;
 
@@ -183,11 +183,11 @@ public class Player : BaseCharacter
         {
             isJumping = true;
             isWallSliding = false;
-            animator.SetBool("IsJumping", true);
+            _anim.SetBool("IsJumping", true);
 
             jumpTimeCounter = jumpTime;
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-
+            _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
+            // rb.velocity = Vector2.up * jumpForce;
         }
 
         //hold 'space bar' jump higher
@@ -195,20 +195,20 @@ public class Player : BaseCharacter
         {
             if (jumpTimeCounter > 0)
             {
-                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-
+                _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
+                // rb.velocity = Vector2.up * jumpForce;
                 jumpTimeCounter -= Time.deltaTime;
             }
             else
             {
                 isJumping = false;
-                animator.SetBool("IsJumping", false);
+                _anim.SetBool("IsJumping", false);
             }
         }
         if (Input.GetButtonUp("Jump"))
         {
             isJumping = false;
-            animator.SetBool("IsJumping", false);
+            _anim.SetBool("IsJumping", false);
         }
     }
 
@@ -234,20 +234,20 @@ public class Player : BaseCharacter
 
         if (onRightWall && !isGrounded)
         {
-            animator.SetBool("IsWallSliding", true);
+            _anim.SetBool("IsWallSliding", true);
         }
         else if (onLeftWall && !isGrounded)
         {
-            animator.SetBool("IsWallSliding", true);
+            _anim.SetBool("IsWallSliding", true);
         }
         else
         {
-            animator.SetBool("IsWallSliding", false);
+            _anim.SetBool("IsWallSliding", false);
         }
 
         if (isWallSliding)
         {
-            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, wallSlideSpeed, float.MaxValue));
+            _rb.velocity = new Vector2(_rb.velocity.x, Mathf.Clamp(_rb.velocity.y, wallSlideSpeed, float.MaxValue));
         }
     }
 
@@ -265,9 +265,9 @@ public class Player : BaseCharacter
             isAttacking = true;
             attackTime = attackCoolDown;
 
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            _rb.velocity = new Vector2(0, 0);
 
-            animator.SetTrigger("Attack");
+            _anim.SetTrigger("Attack");
 
             Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsEnemy);
 
@@ -303,20 +303,20 @@ public class Player : BaseCharacter
         if (Input.GetButtonDown("Fire3") && isGrounded && !isAttacking && !isRolling)
         {
             isRolling = true;
-            animator.SetBool("IsRolling", true);
-            currentRollTime = rollTime;
-            rb.velocity = Vector2.zero;
+            _anim.SetBool("IsRolling", true);
+            //currentRollTime = startRollTime;
+            _rb.velocity = Vector2.zero;
         }
 
         if (isRolling)
         {
             if (m_FacingRight)
             {
-                rb.velocity = Vector2.right * rollForce;
+                _rb.velocity = Vector2.right * rollForce;
             }
             else
             {
-                rb.velocity = Vector2.left * rollForce;
+                _rb.velocity = Vector2.left * rollForce;
             }
 
             currentRollTime -= Time.deltaTime;
@@ -324,10 +324,9 @@ public class Player : BaseCharacter
             if (currentRollTime <= 0)
             {
                 isRolling = false;
-                animator.SetBool("IsRolling", false);
+                _anim.SetBool("IsRolling", false);
             }
         }
     }
 
 }
-
