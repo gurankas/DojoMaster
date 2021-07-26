@@ -416,8 +416,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a2b3e1a308248f4985be5529da95ac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
   Space: 10
+  speed: 5
   m_FacingRight: 1
   runSpeed: 5
   animator: {fileID: 0}
@@ -2233,8 +2233,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55d737641d0d89f41b5d491a72ff1105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
   Space: 10
+  speed: 5
   m_FacingRight: 1
   runSpeed: 5
   animator: {fileID: 1977865513}
@@ -2247,7 +2247,7 @@ MonoBehaviour:
   wallCheckRadius: 0.11
   wallSlideSpeed: -3
   wallJumpCoolDown: 2
-  wallJumpReactionTime: 0.1
+  wallJumpReactionTime: 0.2
   attackPoint: {fileID: 1071083464}
   attackRadius: 0.5
   attackCoolDown: 0.35

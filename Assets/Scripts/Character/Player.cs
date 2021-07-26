@@ -82,6 +82,7 @@ public class Player : BaseCharacter
 
     private void Update()
     {
+
         //animation
         _anim.SetFloat("Speed", Mathf.Abs(runInput));
         _anim.SetBool("IsGrounded", isGrounded);
@@ -93,13 +94,14 @@ public class Player : BaseCharacter
 
         Roll();
 
+        Jump();
+
+        WallCheck();
+
         if (!isAttacking && !isRolling)
         {
             Move(runInput);
-            Jump();
-            WallCheck();
         }
-
 
         //adding restart if needed during demonstration
         if (Input.GetKeyDown(KeyCode.R))
@@ -162,6 +164,11 @@ public class Player : BaseCharacter
                 isInWallJumpCoolDown = false;
             }
             else if (onRightWall && previousWall == -1)
+            {
+                wallJumpCoolDownCounter = wallJumpCoolDown;
+                isInWallJumpCoolDown = false;
+            }
+            else if (isGrounded)
             {
                 wallJumpCoolDownCounter = wallJumpCoolDown;
                 isInWallJumpCoolDown = false;
@@ -256,18 +263,19 @@ public class Player : BaseCharacter
         if (Input.GetButtonDown("Fire1") && !isAttacking && !isRolling && !isWallSliding)
         {
 
-            if (isJumping)
-            {
-                isJumping = false;
-                animator.SetBool("IsJumping", false);
-            }
+            // if (isJumping)
+            // {
+            //     isJumping = false;
+            //     animator.SetBool("IsJumping", false);
+            // }
 
             isAttacking = true;
             attackTime = attackCoolDown;
 
-            _rb.velocity = new Vector2(0, 0);
+            _rb.velocity = new Vector2(Mathf.Clamp(_rb.velocity.x, -0.7f, 0.7f), _rb.velocity.y);
 
             _anim.SetTrigger("Attack");
+            _anim.SetBool("IsJumping", false);
 
             Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsEnemy);
 
@@ -304,7 +312,7 @@ public class Player : BaseCharacter
         {
             isRolling = true;
             _anim.SetBool("IsRolling", true);
-            //currentRollTime = startRollTime;
+            currentRollTime = rollTime;
             _rb.velocity = Vector2.zero;
         }
 
