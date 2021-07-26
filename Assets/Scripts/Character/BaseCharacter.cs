@@ -8,9 +8,6 @@ public class BaseCharacter : MonoBehaviour
     protected Animator _anim;
     protected Rigidbody2D _rb;
 
-    protected Animator _anim;
-    protected Rigidbody2D _rb;
-
     public float speed = 5;
 
     [HideInInspector]
