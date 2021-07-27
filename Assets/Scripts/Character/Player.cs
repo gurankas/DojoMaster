@@ -94,9 +94,11 @@ public class Player : BaseCharacter
 
         Roll();
 
+        WallCheck();
+
         Jump();
 
-        WallCheck();
+
 
         if (!isAttacking && !isRolling)
         {
@@ -130,21 +132,23 @@ public class Player : BaseCharacter
         //wallJump cooldown
         if (!isInWallJumpCoolDown)
         {
+
+            //store current wall side
+            if (onLeftWall)
+            {
+                previousWall = -1;
+            }
+            else if (onRightWall)
+            {
+                previousWall = 1;
+            }
+
             if (isWallSliding && Input.GetButtonDown("Jump"))
             {
-                //store previous wall side
-                if (onLeftWall)
-                {
-                    previousWall = -1;
-                }
-                else if (onRightWall)
-                {
-                    previousWall = 1;
-                }
 
                 //jump
                 isJumping = true;
-                isWallSliding = false;
+                // isWallSliding = false;
                 _anim.SetBool("IsJumping", true);
 
                 jumpTimeCounter = jumpTime;
@@ -152,8 +156,8 @@ public class Player : BaseCharacter
                 _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
 
                 isInWallJumpCoolDown = true;
-
             }
+            
         }
         else
         {
@@ -185,11 +189,11 @@ public class Player : BaseCharacter
             }
         }
 
-        //jump
+        //groundedjump
         if (isGrounded == true && Input.GetButtonDown("Jump"))
         {
             isJumping = true;
-            isWallSliding = false;
+            // isWallSliding = false;
             _anim.SetBool("IsJumping", true);
 
             jumpTimeCounter = jumpTime;
@@ -212,6 +216,7 @@ public class Player : BaseCharacter
                 _anim.SetBool("IsJumping", false);
             }
         }
+
         if (Input.GetButtonUp("Jump"))
         {
             isJumping = false;
