@@ -61,6 +61,8 @@ public class Player : BaseCharacter
     //roll check
     private bool isRolling = false;
 
+    private bool jumpAttackSwitch = false;
+
     //jump 
     private float jumpTimeCounter;
     //wall
@@ -73,6 +75,8 @@ public class Player : BaseCharacter
     private float currentRollTime;
     //movement
     private float runInput;
+
+
 
 
     private void Start()
@@ -109,6 +113,19 @@ public class Player : BaseCharacter
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        //jumpAttackSwitch
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (jumpAttackSwitch)
+            {
+                jumpAttackSwitch = false;
+            }
+            else
+            {
+                jumpAttackSwitch = true;
+            }
         }
 
     }
@@ -157,7 +174,7 @@ public class Player : BaseCharacter
 
                 isInWallJumpCoolDown = true;
             }
-            
+
         }
         else
         {
@@ -277,7 +294,11 @@ public class Player : BaseCharacter
             isAttacking = true;
             attackTime = attackCoolDown;
 
-            _rb.velocity = new Vector2(Mathf.Clamp(_rb.velocity.x, -0.7f, 0.7f), _rb.velocity.y);
+
+            if (isGrounded || jumpAttackSwitch)
+            {
+                _rb.velocity = new Vector2(Mathf.Clamp(_rb.velocity.x, -0.7f, 0.7f), _rb.velocity.y);
+            }
 
             _anim.SetTrigger("Attack");
             _anim.SetBool("IsJumping", false);
