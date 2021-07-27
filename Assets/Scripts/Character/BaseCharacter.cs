@@ -5,16 +5,18 @@ public class BaseCharacter : MonoBehaviour
 
     [HideInInspector]
     public int Space = 10;
-    protected Animator _anim;
     protected Rigidbody2D _rb;
+    protected Animator _anim;
+    protected SpriteRenderer _sr;
+
 
     public float speed = 5;
 
     [HideInInspector]
     public bool m_FacingRight = true;
-
+    public int attackDamage;
+    public int maxHealth;
     public float runSpeed = 5;
-    public Animator animator;
 
     [Space]
     [Header("Jump Raycast-----------------------------------------------------")]
@@ -26,7 +28,6 @@ public class BaseCharacter : MonoBehaviour
     {
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
-
     }
 
     protected void Move(float horizontalInput)

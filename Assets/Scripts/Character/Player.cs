@@ -145,7 +145,7 @@ public class Player : BaseCharacter
                 //jump
                 isJumping = true;
                 isWallSliding = false;
-                animator.SetBool("IsJumping", true);
+                _anim.SetBool("IsJumping", true);
 
                 jumpTimeCounter = jumpTime;
 
@@ -279,9 +279,12 @@ public class Player : BaseCharacter
 
             Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsEnemy);
 
+
             foreach (Collider2D enemy in hitEnemies)
             {
-                Debug.Log("We Hit" + enemy.name);
+                Debug.Log("We Hit " + enemy.name);
+                enemy.GetComponent<Boss>().TakeDamage(attackDamage);
+
             }
 
 

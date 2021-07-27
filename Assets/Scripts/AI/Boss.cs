@@ -43,8 +43,21 @@ public class Boss : BaseCharacter
     //serves as exit condition from each state for now
     private bool _tempChangeStateTrigger = true;
 
+    //boss current health
+    private int currentHealth;
+    //material
+    private Material matWhite;
+    private Material matDefault;
+
     private void Start()
     {
+        //hit feedback set up
+        _sr = GetComponent<SpriteRenderer>();
+        matWhite = Resources.Load("WhiteFlash", typeof(Material)) as Material;
+        matDefault = _sr.material;
+
+
+        currentHealth = maxHealth;
         SetState(State.Idle);
     }
 
@@ -82,6 +95,36 @@ public class Boss : BaseCharacter
             SetPhase(Phases.Phase2);
         }
     }
+
+    //take damage
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+
+        //hit feedback
+        _sr.material = matWhite;
+        if (currentHealth <= 0)
+        {
+            Die();
+            Invoke("ResetMaterial", 0.1f);
+        }
+        else
+        {
+            Invoke("ResetMaterial", 0.1f);
+        }
+    }
+
+    private void ResetMaterial()
+    {
+        _sr.material = matDefault;
+    }
+
+    //Die
+    private void Die()
+    {
+        Debug.Log("Enemy Died!");
+    }
+
 
     private void SetPhase(Phases newPhase)
     {
