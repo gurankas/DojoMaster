@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class Player : BaseCharacter
 {
+    //making player a singleton
+    public static Player instance;
+
     public float jumpTime;
 
     //wallSlide state Check 
@@ -76,7 +79,13 @@ public class Player : BaseCharacter
     //movement
     private float runInput;
 
-
+    private void OnEnable()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
 
 
     private void Start()
@@ -339,6 +348,7 @@ public class Player : BaseCharacter
 
         if (Input.GetButtonDown("Fire3") && isGrounded && !isAttacking && !isRolling)
         {
+            print("rolling");
             isRolling = true;
             _anim.SetBool("IsRolling", true);
             currentRollTime = rollTime;
