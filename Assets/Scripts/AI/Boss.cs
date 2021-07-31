@@ -15,7 +15,7 @@ public struct PhaseAttackMapping
 public enum State
 {
     Idle,
-    Phase1_LongRange_Desc,
+    Phase1_LongRange_DashTowardsPlayer,
     Phase1_ShortRange_JumpAndCrush,
     Phase2_LongRange_Desc,
     Phase2_ShortRange_Desc,
@@ -55,6 +55,14 @@ public class Boss : BaseCharacter
     [SerializeField]
     private Transform _height;
 
+    [Space]
+    [Header("Slam Attack-----------------------------------------------------")]
+    [SerializeField]
+    private float _dashDistance = 4.2f;
+
+    [SerializeField]
+    private float _dashLerpTime = 0.5f;
+
     private State _currentState = State.Idle;
     private Phases _currentPhase = Phases.Phase1;
     //serves as exit condition from each state for now
@@ -88,7 +96,7 @@ public class Boss : BaseCharacter
     private void OnDrawGizmos()
     {
         //helps visualize the state of the AI
-        Handles.Label(transform.position + new Vector3(0, 2, 0), $"{_currentState}");
+        //Handles.Label(transform.position + new Vector3(0, 2, 0), $"{_currentState}");
     }
 
     private void ToggleStateChangeTrigger()
@@ -172,9 +180,9 @@ public class Boss : BaseCharacter
                     StartCoroutine(OnIdle());
                     break;
                 }
-            case State.Phase1_LongRange_Desc:
+            case State.Phase1_LongRange_DashTowardsPlayer:
                 {
-                    StartCoroutine(OnPhase1_LongRange_Desc());
+                    StartCoroutine(OnPhase1_LongRange_DashTowardsPlayer());
                     break;
                 }
             case State.Phase1_ShortRange_JumpAndCrush:
@@ -278,6 +286,9 @@ public class Boss : BaseCharacter
 
     IEnumerator OnPhase1_ShortRange_JumpAndCrush()
     {
+        // i think I should make him jump a fixed distance based on which direction the player is wrt the boss rather than
+        //just the player position
+
         //play animation of build up plus attack
         //adjust start and end points
         Ray2D ray = new Ray2D(Player.instance.transform.position, Vector2.down);
@@ -303,10 +314,14 @@ public class Boss : BaseCharacter
         SetState(ChooseAttack());
     }
 
-    IEnumerator OnPhase1_LongRange_Desc()
+    IEnumerator OnPhase1_LongRange_DashTowardsPlayer()
     {
         //this is 'Start' of this state
         yield return new WaitForSeconds(0.0f);
+
+        //trigger animation
+        //lerp position
+
         Invoke("ToggleStateChangeTrigger", 2f);
         while (_tempChangeStateTrigger)
         {
@@ -317,5 +332,37 @@ public class Boss : BaseCharacter
         SetState(ChooseAttack());
     }
 }
+
+/* oLD JUMP AND CRUSH WHICH FOLLOWS PLAYER POS ACCURATELY
+IEnumerator OnPhase1_ShortRange_JumpAndCrush()
+{
+    // i think I should make him jump a fixed distance based on which direction the player is wrt the boss rather than
+    //just the player position
+
+    //play animation of build up plus attack
+    //adjust start and end points
+    Ray2D ray = new Ray2D(Player.instance.transform.position, Vector2.down);
+    var hitOut = Physics2D.Raycast(Player.instance.transform.position, Vector2.down, 100, _groundLayer);
+    if (hitOut.collider.gameObject != null)
+    {
+        _startPos.position = hitOut.point + new Vector2(0, 1);
+        _endPos.position = transform.position + new Vector3(0, 1, 0);
+        _height.position = new Vector3((_startPos.position.x + _endPos.position.x) / 2, Player.instance.transform.position.y + 3.5f, 0);
+        //trigger movement along parabola
+        _pc.FollowParabola();
+        //this is 'Start' of this state
+        yield return new WaitForSeconds(0.0f);
+
+        Invoke("ToggleStateChangeTrigger", 2f);
+        while (_tempChangeStateTrigger)
+        {
+            //this is fixedupdate for this state
+            yield return new WaitForFixedUpdate();
+        }
+    }
+    ToggleStateChangeTrigger();
+    SetState(ChooseAttack());
+}*/
+
 //jump and slam player
 //dash and use melee weapon on ground
