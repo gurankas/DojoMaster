@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-
+using DG.Tweening;
 
 [Serializable]
 public struct PhaseAttackMapping
@@ -56,9 +56,12 @@ public class Boss : BaseCharacter
     private Transform _height;
 
     [Space]
-    [Header("Slam Attack-----------------------------------------------------")]
+    [Header("Dash Attack-----------------------------------------------------")]
     [SerializeField]
     private float _dashDistance = 4.2f;
+
+    [SerializeField]
+    private float _randomDashDistanceOffset = 1f;
 
     [SerializeField]
     private float _dashLerpTime = 0.5f;
@@ -69,6 +72,7 @@ public class Boss : BaseCharacter
     private bool _tempChangeStateTrigger = true;
 
     private ParabolaController _pc;
+    private bool _committedInAttack = false;
 
     //boss current health
     private int _currentHealth;
@@ -127,6 +131,23 @@ public class Boss : BaseCharacter
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             SetPhase(Phases.Phase2);
+        }
+
+        if (!_committedInAttack)
+        {
+            FaceTowardsPlayer();
+        }
+    }
+
+    private void FaceTowardsPlayer()
+    {
+        if (Player.instance.transform.position.x < transform.position.x && m_FacingRight)
+        {
+            Flip();
+        }
+        if (Player.instance.transform.position.x > transform.position.x && !m_FacingRight)
+        {
+            Flip();
         }
     }
 
@@ -319,8 +340,12 @@ public class Boss : BaseCharacter
         //this is 'Start' of this state
         yield return new WaitForSeconds(0.0f);
 
-        //trigger animation
+        //TODO trigger animation
+        _committedInAttack = true;
         //lerp position
+        float finalXPos = m_FacingRight ? transform.position.x + _dashDistance : transform.position.x - _dashDistance;
+        finalXPos += UnityEngine.Random.Range(-_randomDashDistanceOffset, _randomDashDistanceOffset);
+        transform.DOMoveX(finalXPos, _dashLerpTime);
 
         Invoke("ToggleStateChangeTrigger", 2f);
         while (_tempChangeStateTrigger)
@@ -329,6 +354,7 @@ public class Boss : BaseCharacter
             yield return new WaitForFixedUpdate();
         }
         ToggleStateChangeTrigger();
+        _committedInAttack = false;
         SetState(ChooseAttack());
     }
 }

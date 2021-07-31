@@ -56,7 +56,7 @@ public class BaseCharacter : MonoBehaviour
     }
 
     //I do not want to use 'flip x' because my attack point will not filp with character
-    private void Flip()
+    protected void Flip()
     {
         m_FacingRight = !m_FacingRight;
         //if put camera in children, camera view will change. so i have to let the camera follow the character.
