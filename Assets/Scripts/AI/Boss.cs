@@ -355,10 +355,7 @@ public class Boss : BaseCharacter
         //if not, reposition
         if (Mathf.Abs(Player.instance.transform.position.x - transform.position.x) > _dashDistanceForAttack)
         {
-            float reposPoint = m_FacingRight ? Player.instance.transform.position.x - _dashDistanceForAttack : Player.instance.transform.position.x + _dashDistanceForAttack;
-
-            _repositioning = true;
-            Reposition(new Vector2(reposPoint, transform.position.y));
+            DetermineAndMoveToAttackRange(_dashDistanceForAttack);
         }
 
         //making sure attack doesnt happen until repositioning is finished
@@ -393,6 +390,14 @@ public class Boss : BaseCharacter
         }
 
         SetState(ChooseAttack());
+    }
+
+    private void DetermineAndMoveToAttackRange(float attackRange)
+    {
+        float reposPoint = m_FacingRight ? Player.instance.transform.position.x - attackRange : Player.instance.transform.position.x + attackRange;
+
+        _repositioning = true;
+        Reposition(new Vector2(reposPoint, transform.position.y));
     }
 
     //marks the dash attack complete after lerping to the destination is complete
