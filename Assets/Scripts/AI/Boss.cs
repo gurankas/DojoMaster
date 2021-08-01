@@ -41,6 +41,13 @@ public class Boss : BaseCharacter
     [SerializeField]
     private LayerMask _groundLayer;
 
+    [SerializeField]
+    private float _timeBetweenAttacks = 1;
+
+    [SerializeField]
+    private float _randomOffsetBetweenAttacks = 0.3f;
+    //------------------------------------------------------------------------------
+
     [Space]
     [Header("Slam Attack-----------------------------------------------------")]
     [SerializeField]
@@ -54,31 +61,38 @@ public class Boss : BaseCharacter
 
     [SerializeField]
     private Transform _height;
+    //------------------------------------------------------------------------------
 
     [Space]
     [Header("Dash Attack-----------------------------------------------------")]
     [SerializeField]
-    private float _dashDistance = 4.2f;
+    private float _dashFixedDistance = 4.2f;
 
     [SerializeField]
-    private float _randomDashDistanceOffset = 1f;
+    private float _randomDashDistanceOffsetRange = 1f;
 
     [SerializeField]
     private float _dashLerpTime = 0.5f;
 
+    private float _dashDistanceForAttack = 0;
+    //------------------------------------------------------------------------------
+
     private State _currentState = State.Idle;
+
     private Phases _currentPhase = Phases.Phase1;
     //serves as exit condition from each state for now
     private bool _tempChangeStateTrigger = true;
 
     private ParabolaController _pc;
     private bool _committedInAttack = false;
+    private bool _repositioning = false;
 
     //boss current health
     private int _currentHealth;
     //material
     private Material matWhite;
     private Material matDefault;
+    //------------------------------------------------------------------------------
 
     private void OnEnable()
     {
@@ -100,7 +114,7 @@ public class Boss : BaseCharacter
     private void OnDrawGizmos()
     {
         //helps visualize the state of the AI
-        //Handles.Label(transform.position + new Vector3(0, 2, 0), $"{_currentState}");
+        Handles.Label(transform.position + new Vector3(0, 2, 0), $"{m_FacingRight}");
     }
 
     private void ToggleStateChangeTrigger()
@@ -133,9 +147,9 @@ public class Boss : BaseCharacter
             SetPhase(Phases.Phase2);
         }
 
+        FaceTowardsPlayer();
         if (!_committedInAttack)
         {
-            FaceTowardsPlayer();
         }
     }
 
@@ -192,7 +206,7 @@ public class Boss : BaseCharacter
         StopAllCoroutines();
 
         _currentState = newState;
-        Debug.Log(newState);
+        //Debug.Log(newState);
         //based on the state, we start a different coroutine
         switch (_currentState)
         {
@@ -238,7 +252,7 @@ public class Boss : BaseCharacter
     {
         //this is 'Start' of this state
         yield return new WaitForSeconds(0f);
-        Invoke("ToggleStateChangeTrigger", 2f);
+        Invoke("ToggleStateChangeTrigger", UnityEngine.Random.Range(_timeBetweenAttacks - _randomOffsetBetweenAttacks, _timeBetweenAttacks + _randomOffsetBetweenAttacks));
 
         while (_tempChangeStateTrigger)
         {
@@ -332,30 +346,82 @@ public class Boss : BaseCharacter
             }
         }
         ToggleStateChangeTrigger();
-        SetState(ChooseAttack());
+        SetState(State.Idle);
     }
 
     IEnumerator OnPhase1_LongRange_DashTowardsPlayer()
     {
-        //this is 'Start' of this state
-        yield return new WaitForSeconds(0.0f);
+        //setup
+        float randomOffset = UnityEngine.Random.Range(-_randomDashDistanceOffsetRange, _randomDashDistanceOffsetRange);
+        _dashDistanceForAttack = _dashFixedDistance + randomOffset;
+
+        //Debug.Log($"new dash + {Mathf.Abs(Player.instance.transform.position.x - transform.position.x)}");
+
+        //first verify if the boss if close enough to do attack
+        //if not, reposition
+        if (Mathf.Abs(Player.instance.transform.position.x - transform.position.x) > _dashDistanceForAttack)
+        {
+            DetermineAndMoveToAttackRange(_dashDistanceForAttack);
+        }
+
+        //making sure attack doesnt happen until repositioning is finished
+        if (_repositioning == true)
+        {
+            while (_repositioning)
+            {
+                //this is 'Start' of this state
+                yield return new WaitForSeconds(0.0f);
+            }
+        }
+
+        //the position boss has to move after dash is complete based on the direction he is facing wrt to player
+        float finalXPos = m_FacingRight ? transform.position.x + _dashFixedDistance : transform.position.x - _dashFixedDistance;
+        finalXPos += randomOffset;
 
         //TODO trigger animation
-        _committedInAttack = true;
-        //lerp position
-        float finalXPos = m_FacingRight ? transform.position.x + _dashDistance : transform.position.x - _dashDistance;
-        finalXPos += UnityEngine.Random.Range(-_randomDashDistanceOffset, _randomDashDistanceOffset);
-        transform.DOMoveX(finalXPos, _dashLerpTime);
 
-        Invoke("ToggleStateChangeTrigger", 2f);
-        while (_tempChangeStateTrigger)
+        //makes sure this state remains until the animation and movement is complete
+        _committedInAttack = true;
+
+        //lerp position
+        var tweener = transform.DOMoveX(finalXPos, _dashLerpTime);
+
+        //this is what will actually make the while loop stop after lerping is complete
+        DashAttackComplete(tweener);
+
+        while (_committedInAttack)
         {
             //this is fixedupdate for this state
             yield return new WaitForFixedUpdate();
         }
-        ToggleStateChangeTrigger();
+
+        SetState(State.Idle);
+    }
+
+    private void DetermineAndMoveToAttackRange(float attackRange)
+    {
+        float reposPoint = m_FacingRight ? Player.instance.transform.position.x - attackRange : Player.instance.transform.position.x + attackRange;
+
+        _repositioning = true;
+        Reposition(new Vector2(reposPoint, transform.position.y));
+    }
+
+    //marks the dash attack complete after lerping to the destination is complete
+    async private void DashAttackComplete(Tweener tween)
+    {
+        await tween.AsyncWaitForCompletion();
         _committedInAttack = false;
-        SetState(ChooseAttack());
+    }
+
+    //should it account for Y repositioning as well?
+    async private void Reposition(Vector2 pos)
+    {
+        //TODO needs to make sure the boss doesn't exit the battle arena as well
+
+        //using local distance for calculation of time to be taken for 
+        var tweener = transform.DOMove(pos, (pos.x - transform.position.x) / speed);
+        await tweener.AsyncWaitForCompletion();
+        _repositioning = false;
     }
 }
 
@@ -392,3 +458,7 @@ IEnumerator OnPhase1_ShortRange_JumpAndCrush()
 
 //jump and slam player
 //dash and use melee weapon on ground
+//add repositioning of boss towards the player
+//initially, there will be a stone in the center player can use to climb
+//while entering phase 2 boss will destroy it and make the fight difficult
+//starting of the boss fight sequence should switch 1) input off 2) lerp camera a little back to a fixed point with a bigger FOV and 3) have boss intro animation
