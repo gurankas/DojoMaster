@@ -349,7 +349,7 @@ public class Player : BaseCharacter
         Physics2D.IgnoreLayerCollision(10, 11, isRolling);
 
 
-        if (Input.GetButtonDown("Fire3") && isGrounded && !isAttacking && !isRolling)
+        if (Input.GetButtonDown("Fire3") && !isAttacking && !isRolling)
         {
             isRolling = true;
             _anim.SetBool("IsRolling", true);
