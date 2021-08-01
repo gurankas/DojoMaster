@@ -345,10 +345,12 @@ public class Player : BaseCharacter
 
     private void Roll()
     {
+        //Ignore enemy collision when rolling
+        Physics2D.IgnoreLayerCollision(10, 11, isRolling);
+
 
         if (Input.GetButtonDown("Fire3") && isGrounded && !isAttacking && !isRolling)
         {
-            print("rolling");
             isRolling = true;
             _anim.SetBool("IsRolling", true);
             currentRollTime = rollTime;
@@ -357,6 +359,7 @@ public class Player : BaseCharacter
 
         if (isRolling)
         {
+
             if (m_FacingRight)
             {
                 _rb.velocity = Vector2.right * rollForce;

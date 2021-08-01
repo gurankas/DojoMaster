@@ -6,6 +6,7 @@ public class BaseCharacter : MonoBehaviour
     [HideInInspector]
     public int Space = 10;
     protected Rigidbody2D _rb;
+    [SerializeField]
     protected Animator _anim;
     protected SpriteRenderer _sr;
 
@@ -24,10 +25,14 @@ public class BaseCharacter : MonoBehaviour
     public float jumpCheckRadius;
     public float jumpForce;
 
+    private float rbScale;
+
+
     private void Awake()
     {
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
+        rbScale = _rb.transform.localScale.x;
     }
 
     protected void Move(float horizontalInput)
@@ -60,7 +65,8 @@ public class BaseCharacter : MonoBehaviour
     {
         m_FacingRight = !m_FacingRight;
         //if put camera in children, camera view will change. so i have to let the camera follow the character.
-        transform.Rotate(0f, 180f, 0f);
+        // transform.Rotate(0f, 180f, 0f);
+        _rb.transform.localScale = new Vector3(-_rb.transform.localScale.x, _rb.transform.localScale.y, _rb.transform.localScale.z);
     }
 
 
