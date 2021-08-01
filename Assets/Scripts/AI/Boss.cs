@@ -40,6 +40,12 @@ public class Boss : BaseCharacter
 
     [SerializeField]
     private LayerMask _groundLayer;
+
+    [SerializeField]
+    private float _timeBetweenAttacks = 1;
+
+    [SerializeField]
+    private float _randomOffsetBetweenAttacks = 0.3f;
     //------------------------------------------------------------------------------
 
     [Space]
@@ -246,7 +252,7 @@ public class Boss : BaseCharacter
     {
         //this is 'Start' of this state
         yield return new WaitForSeconds(0f);
-        Invoke("ToggleStateChangeTrigger", 2f);
+        Invoke("ToggleStateChangeTrigger", UnityEngine.Random.Range(_timeBetweenAttacks - _randomOffsetBetweenAttacks, _timeBetweenAttacks + _randomOffsetBetweenAttacks));
 
         while (_tempChangeStateTrigger)
         {
@@ -340,7 +346,7 @@ public class Boss : BaseCharacter
             }
         }
         ToggleStateChangeTrigger();
-        SetState(ChooseAttack());
+        SetState(State.Idle);
     }
 
     IEnumerator OnPhase1_LongRange_DashTowardsPlayer()
@@ -389,7 +395,7 @@ public class Boss : BaseCharacter
             yield return new WaitForFixedUpdate();
         }
 
-        SetState(ChooseAttack());
+        SetState(State.Idle);
     }
 
     private void DetermineAndMoveToAttackRange(float attackRange)
