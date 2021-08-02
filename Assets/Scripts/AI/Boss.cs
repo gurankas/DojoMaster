@@ -54,13 +54,16 @@ public class Boss : BaseCharacter
     private int _slamsInFirstPhase = 3;
 
     [SerializeField]
-    private Transform _startPos;
+    private Transform[] _slamCurveTransforms;
 
     [SerializeField]
-    private Transform _endPos;
+    private float _slamRange = 6;
 
     [SerializeField]
-    private Transform _height;
+    private float _slamRangeRandomness = 1.5f;
+
+    [SerializeField]
+    private float _slamHeight = 4;
     //------------------------------------------------------------------------------
 
     [Space]
@@ -83,7 +86,7 @@ public class Boss : BaseCharacter
     //serves as exit condition from each state for now
     private bool _tempChangeStateTrigger = true;
 
-    private ParabolaController _pc;
+    //private ParabolaController _pc;
     private bool _committedInAttack = false;
     private bool _repositioning = false;
 
@@ -96,7 +99,7 @@ public class Boss : BaseCharacter
 
     private void OnEnable()
     {
-        _pc = GetComponent<ParabolaController>();
+        //_pc = GetComponent<ParabolaController>();
     }
 
     private void Start()
@@ -321,30 +324,74 @@ public class Boss : BaseCharacter
 
     IEnumerator OnPhase1_ShortRange_JumpAndCrush()
     {
-        // i think I should make him jump a fixed distance based on which direction the player is wrt the boss rather than
-        //just the player position
+        float slamFinalDistance = _slamRange + UnityEngine.Random.Range(-_slamRangeRandomness, _slamRangeRandomness);
 
         //play animation of build up plus attack
-        //adjust start and end points
-        Ray2D ray = new Ray2D(Player.instance.transform.position, Vector2.down);
-        var hitOut = Physics2D.Raycast(Player.instance.transform.position, Vector2.down, 100, _groundLayer);
-        if (hitOut.collider.gameObject != null)
-        {
-            _startPos.position = hitOut.point + new Vector2(0, 1);
-            _endPos.position = transform.position + new Vector3(0, 1, 0);
-            _height.position = new Vector3((_startPos.position.x + _endPos.position.x) / 2, Player.instance.transform.position.y + 3.5f, 0);
-            //trigger movement along parabola
-            _pc.FollowParabola();
-            //this is 'Start' of this state
-            yield return new WaitForSeconds(0.0f);
 
-            Invoke("ToggleStateChangeTrigger", 2f);
-            while (_tempChangeStateTrigger)
+        //reposition the boss first
+        if (Mathf.Abs(Player.instance.transform.position.x - transform.position.x) > slamFinalDistance)
+        {
+            DetermineAndMoveToAttackRange(slamFinalDistance);
+        }
+
+        //making sure attack doesnt happen until repositioning is finished
+        if (_repositioning == true)
+        {
+            while (_repositioning)
             {
-                //this is fixedupdate for this state
-                yield return new WaitForFixedUpdate();
+                //this is 'Start' of this state
+                yield return new WaitForSeconds(0.0f);
             }
         }
+
+        //adjust start and end points
+        if (_slamCurveTransforms.Length >= 3)
+        {
+            //start point
+            _slamCurveTransforms[0].position = new Vector3(
+                x: transform.position.x,
+                y: _slamCurveTransforms[0].position.y,
+                z: _slamCurveTransforms[0].position.z);
+
+            //end point
+            _slamCurveTransforms[_slamCurveTransforms.Length - 1].position = new Vector3(
+                x: m_FacingRight ? transform.position.x + slamFinalDistance : transform.position.x - slamFinalDistance,
+                y: _slamCurveTransforms[_slamCurveTransforms.Length - 1].position.y,
+                z: _slamCurveTransforms[_slamCurveTransforms.Length - 1].position.z);
+
+            //midpoint(s)
+            for (int i = 1; i < _slamCurveTransforms.Length - 1; i++)
+            {
+                _slamCurveTransforms[i].position = new Vector3(
+                    x: (_slamCurveTransforms[0].position.x + _slamCurveTransforms[_slamCurveTransforms.Length - 1].position.x) / 2,
+                    y: _slamHeight,
+                    z: _slamCurveTransforms[i].position.z);
+            }
+        }
+
+        //copy the transforms into a Vector3 array for tweening
+        Vector3[] path = new Vector3[_slamCurveTransforms.Length];
+
+        for (int i = 0; i < _slamCurveTransforms.Length; i++)
+        {
+            path[i] = _slamCurveTransforms[i].position;
+            // print(path[i]);
+        }
+
+        //Tween
+        var tween = transform.DOPath(path, 2, PathType.CatmullRom);
+        tween.SetEase(Ease.InCirc);
+
+        //this is 'Start' of this state
+        yield return new WaitForSeconds(0.0f);
+
+        Invoke("ToggleStateChangeTrigger", 2f);
+        while (_tempChangeStateTrigger)
+        {
+            //this is fixedupdate for this state
+            yield return new WaitForFixedUpdate();
+        }
+
         ToggleStateChangeTrigger();
         SetState(State.Idle);
     }
@@ -359,6 +406,20 @@ public class Boss : BaseCharacter
 
         //first verify if the boss if close enough to do attack
         //if not, reposition
+        if (Mathf.Abs(Player.instance.transform.position.x - transform.position.x) > _dashDistanceForAttack)
+        {
+            DetermineAndMoveToAttackRange(_dashDistanceForAttack);
+        }
+
+        //making sure attack doesnt happen until repositioning is finished
+        if (_repositioning == true)
+        {
+            while (_repositioning)
+            {
+                //this is 'Start' of this state
+                yield return new WaitForSeconds(0.0f);
+            }
+        }
         if (Mathf.Abs(Player.instance.transform.position.x - transform.position.x) > _dashDistanceForAttack)
         {
             DetermineAndMoveToAttackRange(_dashDistanceForAttack);
@@ -419,7 +480,7 @@ public class Boss : BaseCharacter
         //TODO needs to make sure the boss doesn't exit the battle arena as well
 
         //using local distance for calculation of time to be taken for 
-        var tweener = transform.DOMove(pos, (pos.x - transform.position.x) / speed);
+        Tweener tweener = transform.DOMove(pos, (pos.x - transform.position.x) / speed);
         await tweener.AsyncWaitForCompletion();
         _repositioning = false;
     }
