@@ -21,6 +21,7 @@ public enum State
     Phase2_ShortRange_Desc,
     Phase3_LongRange_Desc,
     Phase3_ShortRange_Desc,
+    StartTaunt
 }
 
 public enum Phases
@@ -64,6 +65,9 @@ public class Boss : BaseCharacter
 
     [SerializeField]
     private float _slamHeight = 4;
+
+    [SerializeField]
+    private Ease _slamMovementEasing = Ease.InCirc;
     //------------------------------------------------------------------------------
 
     [Space]
@@ -95,6 +99,8 @@ public class Boss : BaseCharacter
     //material
     private Material matWhite;
     private Material matDefault;
+    //private bool _isBossInactive = true;
+
     //------------------------------------------------------------------------------
 
     private void OnEnable()
@@ -111,13 +117,15 @@ public class Boss : BaseCharacter
 
 
         _currentHealth = maxHealth;
-        SetState(State.Idle);
+
+        // SetState(State.Idle);
     }
 
     private void OnDrawGizmos()
     {
         //helps visualize the state of the AI
         Handles.Label(transform.position + new Vector3(0, 2, 0), $"{m_FacingRight}");
+        Handles.Label(transform.position + new Vector3(0, 2.5f, 0), $"{_currentState}");
     }
 
     private void ToggleStateChangeTrigger()
@@ -248,6 +256,11 @@ public class Boss : BaseCharacter
                     StartCoroutine(OnPhase3_ShortRange_Desc());
                     break;
                 }
+            case State.StartTaunt:
+                {
+                    StartCoroutine(OnStartTaunt());
+                    break;
+                }
         }
     }
 
@@ -257,10 +270,11 @@ public class Boss : BaseCharacter
         yield return new WaitForSeconds(0f);
         Invoke("ToggleStateChangeTrigger", UnityEngine.Random.Range(_timeBetweenAttacks - _randomOffsetBetweenAttacks, _timeBetweenAttacks + _randomOffsetBetweenAttacks));
 
-        while (_tempChangeStateTrigger)
+        while (_tempChangeStateTrigger) //|| _isBossInactive)
         {
             //this is fixedupdate for this state
             yield return new WaitForFixedUpdate();
+            print("in idle`");
         }
         ToggleStateChangeTrigger();
         SetState(ChooseAttack());
@@ -277,6 +291,30 @@ public class Boss : BaseCharacter
             yield return new WaitForFixedUpdate();
         }
         ToggleStateChangeTrigger();
+        SetState(ChooseAttack());
+    }
+
+    IEnumerator OnStartTaunt()
+    {
+        //disable input of player
+        Player.instance.SetInputMode(false);
+
+        //play taunt animation
+
+
+        //this is 'Start' of this state
+        yield return new WaitForSeconds(0.0f);
+        Invoke("ToggleStateChangeTrigger", 2f);
+        while (_tempChangeStateTrigger)
+        {
+            //this is fixedupdate for this state
+            yield return new WaitForFixedUpdate();
+        }
+        ToggleStateChangeTrigger();
+
+        //enable input of player
+        Player.instance.SetInputMode(true);
+
         SetState(ChooseAttack());
     }
 
@@ -380,7 +418,7 @@ public class Boss : BaseCharacter
 
         //Tween
         var tween = transform.DOPath(path, 2, PathType.CatmullRom);
-        tween.SetEase(Ease.InCirc);
+        tween.SetEase(_slamMovementEasing);
 
         //this is 'Start' of this state
         yield return new WaitForSeconds(0.0f);
@@ -483,6 +521,11 @@ public class Boss : BaseCharacter
         Tweener tweener = transform.DOMove(pos, (pos.x - transform.position.x) / speed);
         await tweener.AsyncWaitForCompletion();
         _repositioning = false;
+    }
+
+    public void Init()
+    {
+        SetState(State.StartTaunt);
     }
 }
 

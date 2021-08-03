@@ -11,6 +11,8 @@ public class Player : BaseCharacter
 
     public float jumpTime;
 
+    public static bool isInputEnabled = true;
+
     //wallSlide state Check 
     [Space]
     [Header("Wall check-----------------------------------------------------")]
@@ -100,43 +102,43 @@ public class Player : BaseCharacter
         _anim.SetFloat("Speed", Mathf.Abs(runInput));
         _anim.SetBool("IsGrounded", isGrounded);
 
-        //movement
-        runInput = Input.GetAxisRaw("Horizontal");
-
-        Attack();
-
-        Roll();
-
-        WallCheck();
-
-        Jump();
-
-
-
-        if (!isAttacking && !isRolling)
+        if (isInputEnabled == true)
         {
-            Move(runInput);
-        }
+            //movement
+            runInput = Input.GetAxisRaw("Horizontal");
 
-        //adding restart if needed during demonstration
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+            Attack();
 
-        //jumpAttackSwitch
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            if (jumpAttackSwitch)
+            Roll();
+
+            WallCheck();
+
+            Jump();
+
+            if (!isAttacking && !isRolling)
             {
-                jumpAttackSwitch = false;
+                Move(runInput);
             }
-            else
+
+            //adding restart if needed during demonstration
+            if (Input.GetKeyDown(KeyCode.R))
             {
-                jumpAttackSwitch = true;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+
+            //jumpAttackSwitch
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                if (jumpAttackSwitch)
+                {
+                    jumpAttackSwitch = false;
+                }
+                else
+                {
+                    jumpAttackSwitch = true;
+                }
             }
         }
-
     }
 
     private void OnDrawGizmos()
@@ -158,7 +160,6 @@ public class Player : BaseCharacter
         //wallJump cooldown
         if (!isInWallJumpCoolDown)
         {
-
             //store current wall side
             if (onLeftWall)
             {
@@ -171,7 +172,6 @@ public class Player : BaseCharacter
 
             if (isWallSliding && Input.GetButtonDown("Jump"))
             {
-
                 //jump
                 isJumping = true;
                 // isWallSliding = false;
@@ -183,7 +183,6 @@ public class Player : BaseCharacter
 
                 isInWallJumpCoolDown = true;
             }
-
         }
         else
         {
@@ -339,9 +338,7 @@ public class Player : BaseCharacter
         // {
         //     rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, 0.8f, float.MaxValue));
         // }
-
     }
-
 
     private void Roll()
     {
@@ -379,4 +376,8 @@ public class Player : BaseCharacter
         }
     }
 
+    public void SetInputMode(bool enabled)
+    {
+        isInputEnabled = enabled;
+    }
 }
