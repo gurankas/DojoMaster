@@ -311,17 +311,7 @@ public class Player : BaseCharacter
             _anim.SetTrigger("Attack");
             _anim.SetBool("IsJumping", false);
 
-            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsEnemy);
-
-
-            foreach (Collider2D enemy in hitEnemies)
-            {
-                Debug.Log("We Hit " + enemy.name);
-                enemy.GetComponent<Boss>().TakeDamage(attackDamage);
-
-            }
-
-
+            Invoke("HitDetection", 0.15f);
         }
 
         //attack cool down
@@ -338,6 +328,19 @@ public class Player : BaseCharacter
         // {
         //     rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, 0.8f, float.MaxValue));
         // }
+    }
+
+    private void HitDetection()
+    {
+
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsEnemy);
+
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            Debug.Log("We Hit " + enemy.name);
+            enemy.GetComponent<Boss>().TakeDamage(attackDamage);
+
+        }
     }
 
     private void Roll()

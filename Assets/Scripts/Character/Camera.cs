@@ -16,5 +16,14 @@ public class Camera : MonoBehaviour
         newPosition.y = cameraPoint.position.y;
 
         transform.position = newPosition;
+
+
+
+        
+
+
+
+
+
     }
 }

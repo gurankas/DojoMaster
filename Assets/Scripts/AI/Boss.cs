@@ -180,6 +180,8 @@ public class Boss : BaseCharacter
     public void TakeDamage(int damage)
     {
         _currentHealth -= damage;
+        //camera shake effect
+        CameraShake.instance.StartShake(.2f, .1f);
 
         //hit feedback
         _sr.material = matWhite;

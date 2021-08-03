@@ -661,9 +661,11 @@ MonoBehaviour:
   _timeBetweenAttacks: 1
   _randomOffsetBetweenAttacks: 0.3
   _slamsInFirstPhase: 3
-  _startPos: {fileID: 699031495}
-  _endPos: {fileID: 2106958524}
-  _height: {fileID: 1561155366}
+  _slamCurveTransforms: []
+  _slamRange: 6
+  _slamRangeRandomness: 1.5
+  _slamHeight: 4
+  _slamMovementEasing: 20
   _dashFixedDistance: 4.2
   _randomDashDistanceOffsetRange: 1
   _dashLerpTime: 0.5
@@ -932,11 +934,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5569668202946634747, guid: c06692035ef17654580862430e017058, type: 3}
   m_PrefabInstance: {fileID: 5569668202508744458}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &699031495 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5569668203622029440, guid: c06692035ef17654580862430e017058, type: 3}
-  m_PrefabInstance: {fileID: 5569668202508744458}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &728405236
 GameObject:
   m_ObjectHideFlags: 0
@@ -979,6 +976,7 @@ GameObject:
   - component: {fileID: 813737618}
   - component: {fileID: 813737617}
   - component: {fileID: 813737620}
+  - component: {fileID: 813737621}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1064,6 +1062,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraPoint: {fileID: 1221605959}
+--- !u!114 &813737621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 813737616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d5c43119bf77e1419c53bcaa1fcf74d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationMultiplier: 7.5
 --- !u!1 &861454337
 GameObject:
   m_ObjectHideFlags: 0
@@ -1670,11 +1681,6 @@ Transform:
   m_Father: {fileID: 268734419}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1561155366 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5569668202558162488, guid: c06692035ef17654580862430e017058, type: 3}
-  m_PrefabInstance: {fileID: 5569668202508744458}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1562610555
 GameObject:
   m_ObjectHideFlags: 0
@@ -2502,11 +2508,6 @@ Transform:
   m_Father: {fileID: 409872252}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &2106958524 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5569668204219378912, guid: c06692035ef17654580862430e017058, type: 3}
-  m_PrefabInstance: {fileID: 5569668202508744458}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5569668202508744458
 PrefabInstance:
   m_ObjectHideFlags: 0
