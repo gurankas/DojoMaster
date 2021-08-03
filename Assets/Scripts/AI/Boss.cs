@@ -114,10 +114,6 @@ public class Boss : BaseCharacter
 
         //hit feedback set up
         _sr = GetComponentsInChildren<SpriteRenderer>();
-        if (_sr.Length != 0)
-        {
-            print(_sr.Length);
-        }
         matWhite = Resources.Load("WhiteFlash", typeof(Material)) as Material;
 
         for (int i = 0; i < _sr.Length; i++)
@@ -433,21 +429,24 @@ public class Boss : BaseCharacter
             // print(path[i]);
         }
 
+        //makes sure this state remains until the animation and movement is complete
+        _committedInAttack = true;
+
         //Tween
         var tween = transform.DOPath(path, 2, PathType.CatmullRom);
         tween.SetEase(_slamMovementEasing);
 
         //this is 'Start' of this state
-        yield return new WaitForSeconds(0.0f);
+        // yield return new WaitForSeconds(0.0f);
 
-        Invoke("ToggleStateChangeTrigger", 2f);
-        while (_tempChangeStateTrigger)
+        AttackComplete(tween);
+
+        while (_committedInAttack)
         {
             //this is fixedupdate for this state
             yield return new WaitForFixedUpdate();
         }
 
-        ToggleStateChangeTrigger();
         SetState(State.Idle);
     }
 
@@ -503,7 +502,7 @@ public class Boss : BaseCharacter
         var tweener = transform.DOMoveX(finalXPos, _dashLerpTime);
 
         //this is what will actually make the while loop stop after lerping is complete
-        DashAttackComplete(tweener);
+        AttackComplete(tweener);
 
         while (_committedInAttack)
         {
@@ -514,16 +513,18 @@ public class Boss : BaseCharacter
         SetState(State.Idle);
     }
 
+    //generic method to 
     private void DetermineAndMoveToAttackRange(float attackRange)
     {
         float reposPoint = m_FacingRight ? Player.instance.transform.position.x - attackRange : Player.instance.transform.position.x + attackRange;
+        // float reposPoint = Player.instance.transform.position.x - attackRange;
 
         _repositioning = true;
         Reposition(new Vector2(reposPoint, transform.position.y));
     }
 
     //marks the dash attack complete after lerping to the destination is complete
-    async private void DashAttackComplete(Tweener tween)
+    async private void AttackComplete(Tweener tween)
     {
         await tween.AsyncWaitForCompletion();
         _committedInAttack = false;
@@ -535,7 +536,7 @@ public class Boss : BaseCharacter
         //TODO needs to make sure the boss doesn't exit the battle arena as well
 
         //using local distance for calculation of time to be taken for 
-        Tweener tweener = transform.DOMove(pos, (pos.x - transform.position.x) / speed);
+        Tweener tweener = transform.DOMove(pos, Mathf.Abs(pos.x - transform.position.x) / speed);
         await tweener.AsyncWaitForCompletion();
         _repositioning = false;
     }
