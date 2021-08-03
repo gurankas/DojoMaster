@@ -10,6 +10,9 @@ public class BaseCharacter : MonoBehaviour
     protected Animator _anim;
     protected SpriteRenderer[] _sr;
 
+    [SerializeField]
+    protected PlayerAttackPS _attackPS;
+
 
     public float speed = 5;
 

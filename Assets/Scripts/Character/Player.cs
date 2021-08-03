@@ -308,6 +308,11 @@ public class Player : BaseCharacter
                 _rb.velocity = new Vector2(Mathf.Clamp(_rb.velocity.x, -0.7f, 0.7f), _rb.velocity.y);
             }
 
+            if (_attackPS != null)
+            {
+                _attackPS.gameObject.SetActive(true);
+            }
+
             _anim.SetTrigger("Attack");
             _anim.SetBool("IsJumping", false);
 
@@ -382,5 +387,13 @@ public class Player : BaseCharacter
     public void SetInputMode(bool enabled)
     {
         isInputEnabled = enabled;
+    }
+
+    public void StopAttackPS()
+    {
+        if (_attackPS != null)
+        {
+            _attackPS.gameObject.SetActive(false);
+        }
     }
 }
