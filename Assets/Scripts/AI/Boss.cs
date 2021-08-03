@@ -586,3 +586,4 @@ IEnumerator OnPhase1_ShortRange_JumpAndCrush()
 //starting of the boss fight sequence should switch 1) input off 2) lerp camera a little back to a fixed point with a bigger FOV and 3) have boss intro animation
 //integrate animations
 //and make the boss go into down mode when the fight is finished
+//do the jump and slam 3 times or whatever the number is int the inspector

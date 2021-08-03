@@ -806,6 +806,7 @@ GameObject:
   - component: {fileID: 991264186}
   - component: {fileID: 991264185}
   - component: {fileID: 991264184}
+  - component: {fileID: 991264188}
   m_Layer: 0
   m_Name: Main Camera (1)
   m_TagString: MainCamera
@@ -891,6 +892,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &991264188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991264183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d5c43119bf77e1419c53bcaa1fcf74d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationMultiplier: 7.5
 --- !u!1 &1046812567
 GameObject:
   m_ObjectHideFlags: 0
@@ -1029,6 +1043,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1595001637, guid: 56da7860d29fc27488492dcefa0492a8, type: 3}
+      propertyPath: _attacksPerPhase.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1595001637, guid: 56da7860d29fc27488492dcefa0492a8, type: 3}
       propertyPath: _slamCurveTransforms.Array.data[0]
       value: 
       objectReference: {fileID: 1083688316}
@@ -1040,6 +1058,14 @@ PrefabInstance:
       propertyPath: _slamCurveTransforms.Array.data[2]
       value: 
       objectReference: {fileID: 822161611}
+    - target: {fileID: 1595001637, guid: 56da7860d29fc27488492dcefa0492a8, type: 3}
+      propertyPath: _attacksPerPhase.Array.data[4].attack
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1595001637, guid: 56da7860d29fc27488492dcefa0492a8, type: 3}
+      propertyPath: _attacksPerPhase.Array.data[5].attack
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3573412338794219620, guid: 56da7860d29fc27488492dcefa0492a8, type: 3}
       propertyPath: m_RootOrder
       value: 10
