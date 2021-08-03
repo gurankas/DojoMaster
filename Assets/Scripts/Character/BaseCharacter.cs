@@ -8,7 +8,7 @@ public class BaseCharacter : MonoBehaviour
     protected Rigidbody2D _rb;
     [SerializeField]
     protected Animator _anim;
-    protected SpriteRenderer _sr;
+    protected SpriteRenderer[] _sr;
 
 
     public float speed = 5;

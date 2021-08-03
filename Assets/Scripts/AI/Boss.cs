@@ -98,7 +98,7 @@ public class Boss : BaseCharacter
     private int _currentHealth;
     //material
     private Material matWhite;
-    private Material matDefault;
+    private List<Material> matDefault = new List<Material>();
     //private bool _isBossInactive = true;
 
     //------------------------------------------------------------------------------
@@ -110,11 +110,20 @@ public class Boss : BaseCharacter
 
     private void Start()
     {
-        //hit feedback set up
-        _sr = GetComponent<SpriteRenderer>();
-        matWhite = Resources.Load("WhiteFlash", typeof(Material)) as Material;
-        matDefault = _sr.material;
+        // matDefault = new Material[_sr.Length];
 
+        //hit feedback set up
+        _sr = GetComponentsInChildren<SpriteRenderer>();
+        if (_sr.Length != 0)
+        {
+            print(_sr.Length);
+        }
+        matWhite = Resources.Load("WhiteFlash", typeof(Material)) as Material;
+
+        for (int i = 0; i < _sr.Length; i++)
+        {
+            matDefault.Add(_sr[i].material);
+        }
 
         _currentHealth = maxHealth;
 
@@ -184,7 +193,10 @@ public class Boss : BaseCharacter
         CameraShake.instance.StartShake(.2f, .1f);
 
         //hit feedback
-        _sr.material = matWhite;
+        for (int i = 0; i < _sr.Length; i++)
+        {
+            _sr[i].material = matWhite;
+        }
         if (_currentHealth <= 0)
         {
             Die();
@@ -198,7 +210,10 @@ public class Boss : BaseCharacter
 
     private void ResetMaterial()
     {
-        _sr.material = matDefault;
+        for (int i = 0; i < _sr.Length; i++)
+        {
+            _sr[i].material = matDefault[i];
+        }
     }
 
     //Die
@@ -568,3 +583,5 @@ IEnumerator OnPhase1_ShortRange_JumpAndCrush()
 //initially, there will be a stone in the center player can use to climb
 //while entering phase 2 boss will destroy it and make the fight difficult
 //starting of the boss fight sequence should switch 1) input off 2) lerp camera a little back to a fixed point with a bigger FOV and 3) have boss intro animation
+//integrate animations
+//and make the boss go into down mode when the fight is finished
