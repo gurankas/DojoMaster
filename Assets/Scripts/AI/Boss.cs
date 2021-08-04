@@ -21,7 +21,8 @@ public enum State
     Phase2_ShortRange_Desc,
     Phase3_LongRange_Desc,
     Phase3_ShortRange_Desc,
-    StartTaunt
+    StartTaunt,
+    Defeated
 }
 
 public enum Phases
@@ -216,6 +217,8 @@ public class Boss : BaseCharacter
     private void Die()
     {
         Debug.Log("Enemy Died!");
+        _anim.SetTrigger("DownState");
+        SetState(State.Defeated);
     }
 
 
@@ -272,6 +275,11 @@ public class Boss : BaseCharacter
             case State.StartTaunt:
                 {
                     StartCoroutine(OnStartTaunt());
+                    break;
+                }
+            case State.Defeated:
+                {
+                    StartCoroutine(OnDefeated());
                     break;
                 }
         }
@@ -511,6 +519,19 @@ public class Boss : BaseCharacter
         }
 
         SetState(State.Idle);
+    }
+
+    IEnumerator OnDefeated()
+    {
+        //this is 'Start' of this state
+        yield return new WaitForSeconds(0.0f);
+        Invoke("ToggleStateChangeTrigger", 2f);
+        while (_tempChangeStateTrigger)
+        {
+            //this is fixedupdate for this state
+            yield return new WaitForFixedUpdate();
+        }
+        ToggleStateChangeTrigger();
     }
 
     //generic method to 
