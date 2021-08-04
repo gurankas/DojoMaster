@@ -109,7 +109,7 @@ public class Player : BaseCharacter
 
             Attack();
 
-            Roll();
+            Dash();
 
             WallCheck();
 
@@ -138,6 +138,12 @@ public class Player : BaseCharacter
                     jumpAttackSwitch = true;
                 }
             }
+        }
+        else
+        {
+            runInput = 0;
+            _rb.velocity = new Vector2(0, _rb.velocity.y);
+
         }
     }
 
@@ -348,7 +354,7 @@ public class Player : BaseCharacter
         }
     }
 
-    private void Roll()
+    private void Dash()
     {
         //Ignore enemy collision when rolling
         Physics2D.IgnoreLayerCollision(10, 11, isRolling);
@@ -386,6 +392,8 @@ public class Player : BaseCharacter
 
     public void SetInputMode(bool enabled)
     {
+        _anim.SetBool("IsRolling", false);
+        _anim.SetTrigger("Idle");
         isInputEnabled = enabled;
     }
 
