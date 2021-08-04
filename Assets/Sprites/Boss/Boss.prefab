@@ -306,7 +306,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3094788576384225010}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.156}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.157}
 --- !u!50 &1595001636
 Rigidbody2D:
   serializedVersion: 4
@@ -424,7 +424,7 @@ MonoBehaviour:
   _slamRangeRandomness: 1.5
   _slamHeight: 4
   _slamMovementEasing: 2
-  _dashFixedDistance: 4.2
+  _dashFixedDistance: 8
   _randomDashDistanceOffsetRange: 1
   _dashLerpTime: 0.5
 --- !u!114 &9011701202003465666

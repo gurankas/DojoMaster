@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Gyms/Gym_Gurankas.unity
+    guid: c2ce501c5220b6c468706b6d637e94ad
+  - enabled: 1
     path: Assets/Scenes/Gyms/KevinScene.unity
     guid: 9a286a02cfb6a3e40814a23b9d742ea2
   - enabled: 1

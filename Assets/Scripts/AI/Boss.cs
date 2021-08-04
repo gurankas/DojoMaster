@@ -130,8 +130,8 @@ public class Boss : BaseCharacter
     private void OnDrawGizmos()
     {
         //helps visualize the state of the AI
-        Handles.Label(transform.position + new Vector3(0, 2, 0), $"{m_FacingRight}");
-        Handles.Label(transform.position + new Vector3(0, 2.5f, 0), $"{_currentState}");
+        //Handles.Label(transform.position + new Vector3(0, 2, 0), $"{m_FacingRight}");
+        //Handles.Label(transform.position + new Vector3(0, 2.5f, 0), $"{_currentState}");
     }
 
     private void ToggleStateChangeTrigger()
@@ -321,17 +321,19 @@ public class Boss : BaseCharacter
         Player.instance.SetInputMode(false);
 
         //play taunt animation
-
+        _anim.SetTrigger("BossIntro");
 
         //this is 'Start' of this state
         yield return new WaitForSeconds(0.0f);
-        Invoke("ToggleStateChangeTrigger", 2f);
-        while (_tempChangeStateTrigger)
+
+        //makes sure this state remains until the animation and movement is complete
+        _committedInAttack = true;
+
+        while (_committedInAttack)
         {
             //this is fixedupdate for this state
             yield return new WaitForFixedUpdate();
         }
-        ToggleStateChangeTrigger();
 
         //enable input of player
         Player.instance.SetInputMode(true);
@@ -547,7 +549,15 @@ public class Boss : BaseCharacter
     //marks the dash attack complete after lerping to the destination is complete
     async private void AttackComplete(Tweener tween)
     {
-        await tween.AsyncWaitForCompletion();
+        if (tween != null)
+        {
+            await tween.AsyncWaitForCompletion();
+        }
+        _committedInAttack = false;
+    }
+
+    private void BossIntroComplete()
+    {
         _committedInAttack = false;
     }
 

@@ -1236,8 +1236,8 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1595001637, guid: 56da7860d29fc27488492dcefa0492a8, type: 3}
-      propertyPath: _attacksPerPhase.Array.size
-      value: 6
+      propertyPath: _dashFixedDistance
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1595001637, guid: 56da7860d29fc27488492dcefa0492a8, type: 3}
       propertyPath: _slamCurveTransforms.Array.data[0]
@@ -1251,14 +1251,6 @@ PrefabInstance:
       propertyPath: _slamCurveTransforms.Array.data[2]
       value: 
       objectReference: {fileID: 822161611}
-    - target: {fileID: 1595001637, guid: 56da7860d29fc27488492dcefa0492a8, type: 3}
-      propertyPath: _attacksPerPhase.Array.data[4].attack
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1595001637, guid: 56da7860d29fc27488492dcefa0492a8, type: 3}
-      propertyPath: _attacksPerPhase.Array.data[5].attack
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 952089177295165077, guid: 56da7860d29fc27488492dcefa0492a8, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.8653358
@@ -1417,7 +1409,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8984980576773800313, guid: 56da7860d29fc27488492dcefa0492a8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.156
+      value: -0.157
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 56da7860d29fc27488492dcefa0492a8, type: 3}
@@ -1741,7 +1733,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   m_Color: {r: 0.7169812, g: 0.6602719, b: 0.34834465, a: 1}
   m_FlipX: 0
@@ -1850,7 +1842,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   m_Color: {r: 0.7169812, g: 0.6602719, b: 0.34834465, a: 1}
   m_FlipX: 0
@@ -2678,6 +2670,10 @@ PrefabInstance:
       propertyPath: _startPos
       value: 
       objectReference: {fileID: 75831010}
+    - target: {fileID: 4480868604859684325, guid: 6bdb9d8dc425f314980e016be78e8cf3, type: 3}
+      propertyPath: maxHealth
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 4480868604859684325, guid: 6bdb9d8dc425f314980e016be78e8cf3, type: 3}
       propertyPath: _curvePoints.Array.size
       value: 3
