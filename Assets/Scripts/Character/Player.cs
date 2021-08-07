@@ -352,7 +352,7 @@ public class Player : BaseCharacter
         {
             Debug.Log("We Hit " + enemy.name);
             enemy.GetComponent<Boss>().TakeDamage(attackDamage);
-
+            SoundManagerScript.PlaySound("Hit");
         }
     }
 
