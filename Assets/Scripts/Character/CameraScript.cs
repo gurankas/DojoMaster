@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class CameraScript : MonoBehaviour
 {
@@ -16,8 +17,9 @@ public class CameraScript : MonoBehaviour
         if (Player.isInBossFight)
         {
             Camera.main.orthographicSize = 9;
-            newPosition.x = bossPoint.position.x;
-            newPosition.y = bossPoint.position.y;
+            transform.DOMove(bossPoint.position, 1);
+            // newPosition.x = bossPoint.position.x;
+            // newPosition.y = bossPoint.position.y;
         }
         else
         {
@@ -26,7 +28,6 @@ public class CameraScript : MonoBehaviour
 
             transform.position = newPosition;
         }
-
 
         transform.position = newPosition;
     }
