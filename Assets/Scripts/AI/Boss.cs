@@ -133,9 +133,9 @@ public class Boss : BaseCharacter
     //knockBack when collide with boss  
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.GetComponent<Player>())
         {
-            StartCoroutine(Player.instance.KnockBack(knockBackDuration, knockBackPower, this.transform));
+            other.gameObject.GetComponent<Player>().KnockBack(knockBackDuration, knockBackPower, this.transform, m_FacingRight? Vector2.right: Vector2.left);
         }
     }
 

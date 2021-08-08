@@ -18,8 +18,6 @@ public class CameraScript : MonoBehaviour
         {
             Camera.main.orthographicSize = 9;
             transform.DOMove(bossPoint.position, 1);
-            // newPosition.x = bossPoint.position.x;
-            // newPosition.y = bossPoint.position.y;
         }
         else
         {

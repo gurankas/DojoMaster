@@ -398,7 +398,6 @@ public class Player : BaseCharacter
         _anim.SetTrigger("Idle");
         isInputEnabled = enabled;
         isInBossFight = true;
-
     }
 
     public void StopAttackPS()
@@ -409,18 +408,21 @@ public class Player : BaseCharacter
         }
     }
 
-    public IEnumerator KnockBack(float knockBackDuration, float knockBackPower, Transform obj)
+    public void KnockBack(float knockBackDuration, float knockBackPower, Transform obj, Vector2 newdirection)
     {
-        float timer = 0;
-
-        while (knockBackDuration > timer)
+        if (!isAttacking)
         {
-            timer += Time.deltaTime;
-            Vector2 direction = (obj.transform.position - this.transform.position).normalized;
-            _rb.AddForce(-direction * knockBackPower);
-        }
+            float timer = 0;
 
-        yield return 0;
+            while (knockBackDuration > timer)
+            {
+                timer += Time.deltaTime;
+                Vector2 direction = (obj.transform.position - this.transform.position).normalized;
+                _rb.AddForce(newdirection * knockBackPower);
+            }
+
+        }
+        // yield return 0;
     }
 
 }
