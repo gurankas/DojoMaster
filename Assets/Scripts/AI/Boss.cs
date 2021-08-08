@@ -33,6 +33,9 @@ public enum Phases
 
 public class Boss : BaseCharacter
 {
+    [SerializeField]
+    public LayerMask whatIsPlayer;
+
     [Header("General---------------------------------------------------------")]
     [SerializeField]
     public float knockBackPower = 100;
@@ -127,6 +130,7 @@ public class Boss : BaseCharacter
     //private bool _isBossInactive = true;
     private Rect room;
 
+
     //------------------------------------------------------------------------------
 
     private void OnEnable()
@@ -159,9 +163,24 @@ public class Boss : BaseCharacter
     {
         if (other.gameObject.GetComponent<Player>())
         {
-            other.gameObject.GetComponent<Player>().KnockBack(knockBackDuration, knockBackPower, this.transform, m_FacingRight ? Vector2.right : Vector2.left);
+            other.gameObject.GetComponent<Player>().KnockBack(knockBackDuration, knockBackPower, m_FacingRight ? Vector2.right : Vector2.left);
+            
+            Player.instance.TakeDamage(1);
         }
     }
+
+
+    private void HitDetection()
+    {
+        //attack trigger
+        // Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsPlayer);
+
+        Player.instance.TakeDamage(attackDamage);
+
+        SoundManagerScript.PlaySound("Hit");
+    }
+
+
 
     private void OnDrawGizmos()
     {

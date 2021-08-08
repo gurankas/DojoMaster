@@ -15,6 +15,7 @@ public class Player : BaseCharacter
 
     public static bool isInBossFight;
 
+
     //wallSlide state Check 
     [Space]
     [Header("Wall check-----------------------------------------------------")]
@@ -83,6 +84,11 @@ public class Player : BaseCharacter
     //movement
     private float runInput;
 
+    private Material matWhite;
+    private List<Material> matDefault = new List<Material>();
+
+    private int _currentHealth;
+
     private void OnEnable()
     {
         if (instance == null)
@@ -94,11 +100,24 @@ public class Player : BaseCharacter
 
     private void Start()
     {
+        _currentHealth = maxHealth;
+
+        matWhite = Resources.Load("WhiteFlash", typeof(Material)) as Material;
+
         wallJumpCoolDownCounter = wallJumpCoolDown;
+
+        for (int i = 0; i < _sr.Length; i++)
+        {
+            matDefault.Add(_sr[i].material);
+        }
     }
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Die();
+        }
 
         //animation
         _anim.SetFloat("Speed", Mathf.Abs(runInput));
@@ -128,18 +147,18 @@ public class Player : BaseCharacter
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
 
-            //jumpAttackSwitch
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                if (jumpAttackSwitch)
-                {
-                    jumpAttackSwitch = false;
-                }
-                else
-                {
-                    jumpAttackSwitch = true;
-                }
-            }
+            // //jumpAttackSwitch
+            // if (Input.GetKeyDown(KeyCode.Q))
+            // {
+            //     if (jumpAttackSwitch)
+            //     {
+            //         jumpAttackSwitch = false;
+            //     }
+            //     else
+            //     {
+            //         jumpAttackSwitch = true;
+            //     }
+            // }
         }
         else
         {
@@ -310,11 +329,10 @@ public class Player : BaseCharacter
             isAttacking = true;
             attackTime = attackCoolDown;
 
-
-            if (isGrounded || jumpAttackSwitch)
-            {
-                _rb.velocity = new Vector2(Mathf.Clamp(_rb.velocity.x, -0.7f, 0.7f), _rb.velocity.y);
-            }
+            // if (isGrounded || jumpAttackSwitch)
+            // {
+            //     _rb.velocity = new Vector2(Mathf.Clamp(_rb.velocity.x, -0.7f, 0.7f), _rb.velocity.y);
+            // }
 
             if (_attackPS != null)
             {
@@ -408,21 +426,56 @@ public class Player : BaseCharacter
         }
     }
 
-    public void KnockBack(float knockBackDuration, float knockBackPower, Transform obj, Vector2 newdirection)
+    public void KnockBack(float knockBackDuration, float knockBackPower, Vector2 newdirection)
     {
+        float timer = 0;
+
         if (!isAttacking)
         {
-            float timer = 0;
-
             while (knockBackDuration > timer)
             {
                 timer += Time.deltaTime;
-                Vector2 direction = (obj.transform.position - this.transform.position).normalized;
                 _rb.AddForce(newdirection * knockBackPower);
             }
 
         }
-        // yield return 0;
+
+    }
+
+    public void TakeDamage(int damage)
+    {
+        _currentHealth -= damage;
+        //camera shake effect
+        CameraShake.instance.StartShake(.2f, .1f);
+        _anim.SetTrigger("KnockBack");
+        //hit feedback
+        for (int i = 0; i < _sr.Length; i++)
+        {
+            _sr[i].material = matWhite;
+        }
+
+        if (_currentHealth <= 0)
+        {
+            Die();
+            Invoke("ResetMaterial", 0.1f);
+        }
+        else
+        {
+            Invoke("ResetMaterial", 0.1f);
+        }
+    }
+
+    private void ResetMaterial()
+    {
+        for (int i = 0; i < _sr.Length; i++)
+        {
+            _sr[i].material = matDefault[i];
+        }
+    }
+
+    private void Die()
+    {
+        _anim.SetTrigger("Die");
     }
 
 }
