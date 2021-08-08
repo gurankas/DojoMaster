@@ -33,6 +33,9 @@ public enum Phases
 
 public class Boss : BaseCharacter
 {
+    public float knockBackPower = 100;
+    public float knockBackDuration = 1;
+
     [Header("General---------------------------------------------------------")]
     [SerializeField]
     private float _distanceForLongRangeAttacks = 5;
@@ -141,6 +144,16 @@ public class Boss : BaseCharacter
 
         room = new Rect(_startXPosForRoom.position.x, _startYPosForRoom.position.y, _endXPosForRoom.position.x - _startXPosForRoom.position.x, _endYPosForRoom.position.y - _startYPosForRoom.position.y);
     }
+
+    //knockBack when collide with boss  
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.GetComponent<Player>())
+        {
+            other.gameObject.GetComponent<Player>().KnockBack(knockBackDuration, knockBackPower, this.transform, m_FacingRight? Vector2.right: Vector2.left);
+        }
+    }
+
 
     private void OnDrawGizmos()
     {

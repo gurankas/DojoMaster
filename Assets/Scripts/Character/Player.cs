@@ -13,6 +13,8 @@ public class Player : BaseCharacter
 
     public static bool isInputEnabled = true;
 
+    public static bool isInBossFight;
+
     //wallSlide state Check 
     [Space]
     [Header("Wall check-----------------------------------------------------")]
@@ -350,7 +352,7 @@ public class Player : BaseCharacter
         {
             Debug.Log("We Hit " + enemy.name);
             enemy.GetComponent<Boss>().TakeDamage(attackDamage);
-
+            SoundManagerScript.PlaySound("Hit");
         }
     }
 
@@ -395,6 +397,7 @@ public class Player : BaseCharacter
         _anim.SetBool("IsRolling", false);
         _anim.SetTrigger("Idle");
         isInputEnabled = enabled;
+        isInBossFight = true;
     }
 
     public void StopAttackPS()
@@ -404,4 +407,22 @@ public class Player : BaseCharacter
             _attackPS.gameObject.SetActive(false);
         }
     }
+
+    public void KnockBack(float knockBackDuration, float knockBackPower, Transform obj, Vector2 newdirection)
+    {
+        if (!isAttacking)
+        {
+            float timer = 0;
+
+            while (knockBackDuration > timer)
+            {
+                timer += Time.deltaTime;
+                Vector2 direction = (obj.transform.position - this.transform.position).normalized;
+                _rb.AddForce(newdirection * knockBackPower);
+            }
+
+        }
+        // yield return 0;
+    }
+
 }
