@@ -143,7 +143,6 @@ public class Boss : BaseCharacter
         // matDefault = new Material[_sr.Length];
 
         //hit feedback set up
-        _sr = GetComponentsInChildren<SpriteRenderer>();
         matWhite = Resources.Load("WhiteFlash", typeof(Material)) as Material;
 
         for (int i = 0; i < _sr.Length; i++)

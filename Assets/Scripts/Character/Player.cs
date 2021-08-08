@@ -106,7 +106,7 @@ public class Player : BaseCharacter
 
         wallJumpCoolDownCounter = wallJumpCoolDown;
 
-        for (int i = 0; i < _sr.Length; i++)
+        for (int i = 0; i <_sr.Length ; i++)
         {
             matDefault.Add(_sr[i].material);
         }
@@ -448,6 +448,8 @@ public class Player : BaseCharacter
         //camera shake effect
         CameraShake.instance.StartShake(.2f, .1f);
         _anim.SetTrigger("KnockBack");
+
+
         //hit feedback
         for (int i = 0; i < _sr.Length; i++)
         {

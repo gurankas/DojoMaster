@@ -33,6 +33,7 @@ public class BaseCharacter : MonoBehaviour
 
     private void Awake()
     {
+        _sr = GetComponentsInChildren<SpriteRenderer>();
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
         rbScale = _rb.transform.localScale.x;
