@@ -48,6 +48,18 @@ public class Boss : BaseCharacter
 
     [SerializeField]
     private float _randomOffsetBetweenAttacks = 0.3f;
+
+    [SerializeField]
+    private Transform _startXPosForRoom;
+
+    [SerializeField]
+    private Transform _endXPosForRoom;
+
+    [SerializeField]
+    private Transform _startYPosForRoom;
+
+    [SerializeField]
+    private Transform _endYPosForRoom;
     //------------------------------------------------------------------------------
 
     [Space]
@@ -101,6 +113,7 @@ public class Boss : BaseCharacter
     private Material matWhite;
     private List<Material> matDefault = new List<Material>();
     //private bool _isBossInactive = true;
+    private Rect room;
 
     //------------------------------------------------------------------------------
 
@@ -125,13 +138,19 @@ public class Boss : BaseCharacter
         _currentHealth = maxHealth;
 
         // SetState(State.Idle);
+
+        room = new Rect(_startXPosForRoom.position.x, _startYPosForRoom.position.y, _endXPosForRoom.position.x - _startXPosForRoom.position.x, _endYPosForRoom.position.y - _startYPosForRoom.position.y);
     }
 
     private void OnDrawGizmos()
     {
         //helps visualize the state of the AI
-        //Handles.Label(transform.position + new Vector3(0, 2, 0), $"{m_FacingRight}");
-        //Handles.Label(transform.position + new Vector3(0, 2.5f, 0), $"{_currentState}");
+        Handles.Label(transform.position + new Vector3(0, 2, 0), $"{m_FacingRight}");
+        Handles.Label(transform.position + new Vector3(0, 2.5f, 0), $"{_currentState}");
+
+        // Green
+        Gizmos.color = new Color(0.0f, 1.0f, 0.0f);
+        // /DrawRect(room);
     }
 
     private void ToggleStateChangeTrigger()
@@ -390,10 +409,10 @@ public class Boss : BaseCharacter
         //play animation of build up plus attack
 
         //reposition the boss first
-        if (Mathf.Abs(Player.instance.transform.position.x - transform.position.x) > slamFinalDistance)
-        {
-            DetermineAndMoveToAttackRange(slamFinalDistance);
-        }
+        //if (Mathf.Abs(Player.instance.transform.position.x - transform.position.x) > slamFinalDistance)
+        //{
+        DetermineAndMoveToAttackRange(slamFinalDistance);
+        // }
 
         //making sure attack doesnt happen until repositioning is finished
         if (_repositioning == true)
@@ -468,9 +487,11 @@ public class Boss : BaseCharacter
 
         //Debug.Log($"new dash + {Mathf.Abs(Player.instance.transform.position.x - transform.position.x)}");
 
-        //first verify if the boss if close enough to do attack
+        //first verify if the boss if close enough to do attack and still within the room
         //if not, reposition
-        if (Mathf.Abs(Player.instance.transform.position.x - transform.position.x) > _dashDistanceForAttack)
+        bool isPlayerNotWithinRange = Mathf.Abs(Player.instance.transform.position.x - transform.position.x) > _dashDistanceForAttack;
+        bool isPlayerInsideRoom = room.Contains(new Vector2(Player.instance.transform.position.x, Player.instance.transform.position.y));
+        if (!isPlayerNotWithinRange || !isPlayerInsideRoom)
         {
             DetermineAndMoveToAttackRange(_dashDistanceForAttack);
         }
@@ -483,10 +504,6 @@ public class Boss : BaseCharacter
                 //this is 'Start' of this state
                 yield return new WaitForSeconds(0.0f);
             }
-        }
-        if (Mathf.Abs(Player.instance.transform.position.x - transform.position.x) > _dashDistanceForAttack)
-        {
-            DetermineAndMoveToAttackRange(_dashDistanceForAttack);
         }
 
         //making sure attack doesnt happen until repositioning is finished
@@ -500,7 +517,7 @@ public class Boss : BaseCharacter
         }
 
         //the position boss has to move after dash is complete based on the direction he is facing wrt to player
-        float finalXPos = m_FacingRight ? transform.position.x + _dashFixedDistance : transform.position.x - _dashFixedDistance;
+        float finalXPos = m_FacingRight ? transform.position.x + _dashDistanceForAttack : transform.position.x - _dashDistanceForAttack;
         finalXPos += randomOffset;
 
         //TODO trigger animation
@@ -536,14 +553,67 @@ public class Boss : BaseCharacter
         ToggleStateChangeTrigger();
     }
 
-    //generic method to 
+    //generic method to determine point where boss needs to move before he can execute that particular attack
     private void DetermineAndMoveToAttackRange(float attackRange)
     {
-        float reposPoint = m_FacingRight ? Player.instance.transform.position.x - attackRange : Player.instance.transform.position.x + attackRange;
-        // float reposPoint = Player.instance.transform.position.x - attackRange;
+        Vector2 reposPoint;
+        float reposPointX;
 
+        float min = Player.instance.transform.position.x - attackRange;
+        float max = Player.instance.transform.position.x + attackRange;
+
+        //works if the player is in the room
+        if (room.Contains(new Vector2(min, transform.position.y)) && room.Contains(new Vector2(max, transform.position.y)))
+        {
+            reposPointX = m_FacingRight ? Player.instance.transform.position.x - attackRange : Player.instance.transform.position.x + attackRange;
+        }
+        //takes care of the position if the player is out of the room
+        else
+        {
+            reposPointX = m_FacingRight ? Player.instance.transform.position.x + attackRange : Player.instance.transform.position.x - attackRange;
+        }
+
+        //atrifically makes sure the end point ends up in the room
+        if (!room.Contains(new Vector2(reposPointX, transform.position.y)))
+        {
+            //needs to make sure the boss doesn't exit the battle arena
+            reposPoint = MakeSureItIsWithinRoom(new Vector2(reposPointX, transform.position.y), attackRange);
+        }
+        else
+        {
+            reposPoint = new Vector2(reposPointX, transform.position.y);
+        }
         _repositioning = true;
-        Reposition(new Vector2(reposPoint, transform.position.y));
+        Reposition(reposPoint);
+    }
+
+    void DrawRect(Rect rect)
+    {
+        Gizmos.DrawWireCube(new Vector3(rect.center.x, rect.center.y, 0.01f), new Vector3(rect.size.x, rect.size.y, 0.01f));
+    }
+
+    private Vector2 MakeSureItIsWithinRoom(Vector2 reposPoint, float attackRange)
+    {
+        Vector2 newPoint = reposPoint + new Vector2(attackRange, 0);
+
+        if (newPoint.x < _startXPosForRoom.position.x || reposPoint.x < _startXPosForRoom.position.x)
+        {
+            newPoint = new Vector2(_startXPosForRoom.position.x + attackRange, reposPoint.y);
+        }
+        else if (newPoint.x > _endXPosForRoom.position.x || reposPoint.x > _endXPosForRoom.position.x)
+        {
+            newPoint = new Vector2(_endXPosForRoom.position.x - attackRange, reposPoint.y);
+        }
+        else if (newPoint.y < _startYPosForRoom.position.y || reposPoint.y < _startYPosForRoom.position.y)
+        {
+            newPoint = new Vector2(reposPoint.x, _startYPosForRoom.position.y);
+        }
+        else if (newPoint.y > _endYPosForRoom.position.y || reposPoint.y > _endYPosForRoom.position.y)
+        {
+            newPoint = new Vector2(reposPoint.x, _endYPosForRoom.position.y);
+        }
+
+        return newPoint;
     }
 
     //marks the dash attack complete after lerping to the destination is complete
@@ -564,7 +634,6 @@ public class Boss : BaseCharacter
     //should it account for Y repositioning as well?
     async private void Reposition(Vector2 pos)
     {
-        //TODO needs to make sure the boss doesn't exit the battle arena as well
 
         //using local distance for calculation of time to be taken for 
         Tweener tweener = transform.DOMove(pos, Mathf.Abs(pos.x - transform.position.x) / speed);
