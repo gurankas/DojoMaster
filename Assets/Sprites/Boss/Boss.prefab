@@ -338,7 +338,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -3.43, y: 12.47}
@@ -407,9 +407,9 @@ MonoBehaviour:
   - phases: 1
     attack: 0
   - phases: 0
-    attack: 1
-  - phases: 0
     attack: 2
+  - phases: 0
+    attack: 1
   - phases: 0
     attack: 0
   _groundLayer:
@@ -422,13 +422,52 @@ MonoBehaviour:
   _startYPosForRoom: {fileID: 0}
   _endYPosForRoom: {fileID: 0}
   _slamsInFirstPhase: 3
-  _slamCurveTransforms:
-  - {fileID: 0}
-  - {fileID: 0}
   _slamRange: 6
   _slamRangeRandomness: 1.5
   _slamHeight: 4
-  _slamMovementEasing: 2
+  _slamLerpTime: 1
+  _curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: -0.01828003
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.40716228
+      value: 0.5012715
+      inSlope: -0.00406143
+      outSlope: -0.00406143
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.52922595
+    - serializedVersion: 3
+      time: 0.5674129
+      value: 0.49940497
+      inSlope: -0.017692294
+      outSlope: -0.017692294
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.51339585
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.98172
+      inSlope: 1.9406748
+      outSlope: 1.9406748
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13363041
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _dashFixedDistance: 8
   _randomDashDistanceOffsetRange: 1
   _dashLerpTime: 0.5

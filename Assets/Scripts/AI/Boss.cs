@@ -33,10 +33,13 @@ public enum Phases
 
 public class Boss : BaseCharacter
 {
+    [Header("General---------------------------------------------------------")]
+    [SerializeField]
     public float knockBackPower = 100;
+
+    [SerializeField]
     public float knockBackDuration = 1;
 
-    [Header("General---------------------------------------------------------")]
     [SerializeField]
     private float _distanceForLongRangeAttacks = 5;
 
@@ -70,8 +73,8 @@ public class Boss : BaseCharacter
     [SerializeField]
     private int _slamsInFirstPhase = 3;
 
-    [SerializeField]
-    private Transform[] _slamCurveTransforms;
+    // [SerializeField]
+    // private Transform[] _slamCurveTransforms;
 
     [SerializeField]
     private float _slamRange = 6;
@@ -80,10 +83,16 @@ public class Boss : BaseCharacter
     private float _slamRangeRandomness = 1.5f;
 
     [SerializeField]
-    private float _slamHeight = 4;
+    private float _slamHeight = 5;
 
     [SerializeField]
-    private Ease _slamMovementEasing = Ease.InCirc;
+    private float _slamLerpTime = 1;
+
+    // [SerializeField]
+    // private Ease _slamMovementEasing = Ease.InCirc;
+
+    [SerializeField]
+    private AnimationCurve _curve;
     //------------------------------------------------------------------------------
 
     [Space]
@@ -145,15 +154,14 @@ public class Boss : BaseCharacter
         room = new Rect(_startXPosForRoom.position.x, _startYPosForRoom.position.y, _endXPosForRoom.position.x - _startXPosForRoom.position.x, _endYPosForRoom.position.y - _startYPosForRoom.position.y);
     }
 
-    //knockBack when collide with boss  
-    private void OnCollisionEnter2D(Collision2D other)
+    //knockBack when overlap with boss  
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.GetComponent<Player>())
         {
-            other.gameObject.GetComponent<Player>().KnockBack(knockBackDuration, knockBackPower, this.transform, m_FacingRight? Vector2.right: Vector2.left);
+            other.gameObject.GetComponent<Player>().KnockBack(knockBackDuration, knockBackPower, this.transform, m_FacingRight ? Vector2.right : Vector2.left);
         }
     }
-
 
     private void OnDrawGizmos()
     {
@@ -437,46 +445,12 @@ public class Boss : BaseCharacter
             }
         }
 
-        //adjust start and end points
-        if (_slamCurveTransforms.Length >= 3)
-        {
-            //start point
-            _slamCurveTransforms[0].position = new Vector3(
-                x: transform.position.x,
-                y: _slamCurveTransforms[0].position.y,
-                z: _slamCurveTransforms[0].position.z);
-
-            //end point
-            _slamCurveTransforms[_slamCurveTransforms.Length - 1].position = new Vector3(
-                x: m_FacingRight ? transform.position.x + slamFinalDistance : transform.position.x - slamFinalDistance,
-                y: _slamCurveTransforms[_slamCurveTransforms.Length - 1].position.y,
-                z: _slamCurveTransforms[_slamCurveTransforms.Length - 1].position.z);
-
-            //midpoint(s)
-            for (int i = 1; i < _slamCurveTransforms.Length - 1; i++)
-            {
-                _slamCurveTransforms[i].position = new Vector3(
-                    x: (_slamCurveTransforms[0].position.x + _slamCurveTransforms[_slamCurveTransforms.Length - 1].position.x) / 2,
-                    y: _slamHeight,
-                    z: _slamCurveTransforms[i].position.z);
-            }
-        }
-
-        //copy the transforms into a Vector3 array for tweening
-        Vector3[] path = new Vector3[_slamCurveTransforms.Length];
-
-        for (int i = 0; i < _slamCurveTransforms.Length; i++)
-        {
-            path[i] = _slamCurveTransforms[i].position;
-            // print(path[i]);
-        }
+        //slam tween
+        Sequence tween = _rb.DOJump(new Vector2(m_FacingRight ? transform.position.x + slamFinalDistance : transform.position.x - slamFinalDistance, transform.position.y), _slamHeight, 1, _slamLerpTime);
+        tween.SetEase(_curve);
 
         //makes sure this state remains until the animation and movement is complete
         _committedInAttack = true;
-
-        //Tween
-        var tween = transform.DOPath(path, 2, PathType.CatmullRom);
-        tween.SetEase(_slamMovementEasing);
 
         //this is 'Start' of this state
         // yield return new WaitForSeconds(0.0f);
@@ -638,6 +612,14 @@ public class Boss : BaseCharacter
         }
         _committedInAttack = false;
     }
+    async private void AttackComplete(Sequence tween)
+    {
+        if (tween != null)
+        {
+            await tween.AsyncWaitForCompletion();
+        }
+        _committedInAttack = false;
+    }
 
     private void BossIntroComplete()
     {
@@ -689,6 +671,47 @@ IEnumerator OnPhase1_ShortRange_JumpAndCrush()
     }
     ToggleStateChangeTrigger();
     SetState(ChooseAttack());
+
+
+    //version 2 logic
+
+        //adjust start and end points
+        if (_slamCurveTransforms.Length >= 3)
+        {
+            //start point
+            _slamCurveTransforms[0].position = new Vector3(
+                x: transform.position.x,
+                y: _slamCurveTransforms[0].position.y,
+                z: _slamCurveTransforms[0].position.z);
+
+            //end point
+            _slamCurveTransforms[_slamCurveTransforms.Length - 1].position = new Vector3(
+                x: m_FacingRight ? transform.position.x + slamFinalDistance : transform.position.x - slamFinalDistance,
+                y: _slamCurveTransforms[_slamCurveTransforms.Length - 1].position.y,
+                z: _slamCurveTransforms[_slamCurveTransforms.Length - 1].position.z);
+
+            //midpoint(s)
+            for (int i = 1; i < _slamCurveTransforms.Length - 1; i++)
+            {
+                _slamCurveTransforms[i].position = new Vector3(
+                    x: (_slamCurveTransforms[0].position.x + _slamCurveTransforms[_slamCurveTransforms.Length - 1].position.x) / 2,
+                    y: _slamHeight,
+                    z: _slamCurveTransforms[i].position.z);
+            }
+        }
+
+        //copy the transforms into a Vector3 array for tweening
+        Vector3[] path = new Vector3[_slamCurveTransforms.Length];
+
+        for (int i = 0; i < _slamCurveTransforms.Length; i++)
+        {
+            path[i] = _slamCurveTransforms[i].position;
+            // print(path[i]);
+        }
+
+        //Tween
+        var tween = transform.DOPath(path, 2, PathType.CatmullRom);
+        tween.SetEase(_slamMovementEasing);
 }*/
 
 //jump and slam player
