@@ -17,7 +17,7 @@ public enum State
     Idle,
     Phase1_LongRange_DashTowardsPlayer,
     Phase1_ShortRange_JumpAndCrush,
-    Phase2_LongRange_Desc,
+    Phase1_LongRange_SwordBoomerang,
     Phase2_ShortRange_Desc,
     Phase3_LongRange_Desc,
     Phase3_ShortRange_Desc,
@@ -33,15 +33,15 @@ public enum Phases
 
 public class Boss : BaseCharacter
 {
-    [SerializeField]
-    public LayerMask whatIsPlayer;
+    // [SerializeField]
+    // private LayerMask whatIsPlayer;
 
     [Header("General---------------------------------------------------------")]
     [SerializeField]
-    public float knockBackPower = 100;
+    private float knockBackPower = 100;
 
     [SerializeField]
-    public float knockBackDuration = 1;
+    private float knockBackDuration = 1;
 
     [SerializeField]
     private float _distanceForLongRangeAttacks = 5;
@@ -111,6 +111,30 @@ public class Boss : BaseCharacter
 
     private float _dashDistanceForAttack = 0;
     //------------------------------------------------------------------------------
+    [Space]
+    [Header("Boomerang Attack-----------------------------------------------------")]
+
+    [SerializeField]
+    private float _boomerangAttackRange = 7;
+
+    [SerializeField]
+    private float _randomBoomerangDistanceOffsetRange = 1f;
+
+    [SerializeField]
+    private float _boomerangLerpTime = 0.5f;
+
+    [SerializeField]
+    private int _boomerangRevs = 5;
+
+    [SerializeField]
+    private float _boomerangMidInterval = 0.25f;
+
+    [SerializeField]
+    private float _boomerangRotationForce = 150;
+
+    [SerializeField]
+    private GameObject _swordGO;
+    //------------------------------------------------------------------------------
 
     private State _currentState = State.Idle;
 
@@ -163,7 +187,7 @@ public class Boss : BaseCharacter
         if (other.gameObject.GetComponent<Player>())
         {
             other.gameObject.GetComponent<Player>().KnockBack(knockBackDuration, knockBackPower, m_FacingRight ? Vector2.right : Vector2.left);
-            
+
             Player.instance.TakeDamage(1);
         }
     }
@@ -310,9 +334,9 @@ public class Boss : BaseCharacter
                     StartCoroutine(OnPhase1_ShortRange_JumpAndCrush());
                     break;
                 }
-            case State.Phase2_LongRange_Desc:
+            case State.Phase1_LongRange_SwordBoomerang:
                 {
-                    StartCoroutine(OnPhase2_LongRange_Desc());
+                    StartCoroutine(OnPhase2_LongRange_SwordBoomerang());
                     break;
                 }
             case State.Phase2_ShortRange_Desc:
@@ -427,18 +451,61 @@ public class Boss : BaseCharacter
         SetState(ChooseAttack());
     }
 
-    IEnumerator OnPhase2_LongRange_Desc()
+    IEnumerator OnPhase2_LongRange_SwordBoomerang()
     {
-        //this is 'Start' of this state
-        yield return new WaitForSeconds(0.0f);
-        Invoke("ToggleStateChangeTrigger", 2f);
-        while (_tempChangeStateTrigger)
+        float boomerangeFinalDistance = _boomerangAttackRange + UnityEngine.Random.Range(-_randomBoomerangDistanceOffsetRange, _randomBoomerangDistanceOffsetRange);
+
+        //play animation of build up plus attack
+
+
+        DetermineAndMoveToAttackRange(boomerangeFinalDistance);
+
+        //making sure attack doesnt happen until repositioning is finished
+        if (_repositioning == true)
+        {
+            while (_repositioning)
+            {
+                //this is 'Start' of this state
+                yield return new WaitForSeconds(0.0f);
+            }
+        }
+
+        float finalXPos = m_FacingRight ? _swordGO.transform.position.x + boomerangeFinalDistance : _swordGO.transform.position.x - boomerangeFinalDistance;
+
+        //setup vars
+        var parent = _swordGO.transform.parent;
+        float initPosX = _swordGO.transform.position.x;
+
+        //unparent the GO first to avoid inheriting animation movement
+        _swordGO.transform.parent = null;
+
+        //boomerang tween
+        Sequence seq = DOTween.Sequence();
+        var xMovementTween = _swordGO.transform.DOMoveX(finalXPos, _boomerangLerpTime);
+        seq.Append(xMovementTween);
+        var zRotationTween = _swordGO.transform.DOPunchRotation(new Vector3(0, 0, _boomerangRotationForce), _boomerangLerpTime);
+        seq.Insert(0, zRotationTween);
+        seq.AppendInterval(_boomerangMidInterval);
+        var xBackMovementTween = _swordGO.transform.DOMoveX(initPosX, _boomerangLerpTime);
+        seq.Append(xBackMovementTween);
+        var zBackRotationTween = _swordGO.transform.DOPunchRotation(new Vector3(0, 0, _boomerangRotationForce), _boomerangLerpTime);
+        seq.Insert((seq.Duration() / 2) + (_boomerangMidInterval / 2), zBackRotationTween);
+
+        //makes sure this state remains until the animation and movement is complete
+        _committedInAttack = true;
+
+        AttackComplete(seq);
+
+        while (_committedInAttack)
         {
             //this is fixedupdate for this state
             yield return new WaitForFixedUpdate();
         }
-        ToggleStateChangeTrigger();
-        SetState(ChooseAttack());
+
+        //parent it back to the original thing after attack is over
+        _swordGO.transform.parent = parent;
+
+        SetState(State.Idle);
     }
 
     IEnumerator OnPhase1_ShortRange_JumpAndCrush()
@@ -499,16 +566,6 @@ public class Boss : BaseCharacter
         if (!isPlayerNotWithinRange || !isPlayerInsideRoom)
         {
             DetermineAndMoveToAttackRange(_dashDistanceForAttack);
-        }
-
-        //making sure attack doesnt happen until repositioning is finished
-        if (_repositioning == true)
-        {
-            while (_repositioning)
-            {
-                //this is 'Start' of this state
-                yield return new WaitForSeconds(0.0f);
-            }
         }
 
         //making sure attack doesnt happen until repositioning is finished
