@@ -76,6 +76,7 @@ public class Player : BaseCharacter
 
     private bool jumpAttackSwitch = false;
 
+
     //jump 
     private float jumpTimeCounter;
     //wall
@@ -379,8 +380,11 @@ public class Player : BaseCharacter
         foreach (Collider2D enemy in hitEnemies)
         {
             Debug.Log("We Hit " + enemy.name);
-            enemy.GetComponent<Boss>().TakeDamage(attackDamage);
-            SoundManagerScript.PlaySound("Hit");
+            if (enemy.GetComponent<Boss>())
+            {
+                enemy.GetComponent<Boss>().TakeDamage(attackDamage);
+                SoundManagerScript.PlaySound("Hit");
+            }
         }
     }
 
@@ -496,6 +500,9 @@ public class Player : BaseCharacter
     private void Die()
     {
         _anim.SetTrigger("Die");
+        SetInputMode(false);
+        _bc.enabled = false;
+        _rb.gravityScale = 0;
         Invoke("Lose", 2);
     }
 

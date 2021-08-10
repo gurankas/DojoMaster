@@ -324,7 +324,7 @@ public class Boss : BaseCharacter
         Debug.Log("Enemy Died!");
         _anim.SetTrigger("DownState");
         SetState(State.Defeated);
-
+        _bc.enabled = false;
         Invoke("Win", 3);
 
     }
