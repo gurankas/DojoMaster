@@ -20,12 +20,11 @@ public class HealthBarScript : MonoBehaviour
 
     private void Start()
     {
-        gameObject.SetActive(Player.isInBossFight);
+        gameObject.SetActive(false);
     }
 
     public void ToggleHealthBarVisibility(bool enabled)
     {
         gameObject.SetActive(enabled);
-
     }
 }

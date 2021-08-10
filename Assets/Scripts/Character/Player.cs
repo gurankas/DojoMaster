@@ -109,8 +109,6 @@ public class Player : BaseCharacter
 
         _playerHealthBar.SetMaxHealth(maxHealth);
 
-        _playerHealthBar.ToggleHealthBarVisibility(true);
-
         matWhite = Resources.Load("WhiteFlash", typeof(Material)) as Material;
 
         wallJumpCoolDownCounter = wallJumpCoolDown;
@@ -123,6 +121,9 @@ public class Player : BaseCharacter
 
     private void Update()
     {
+
+        _playerHealthBar.ToggleHealthBarVisibility(true);
+
         if (Input.GetKeyDown(KeyCode.K))
         {
             Die();
