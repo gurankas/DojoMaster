@@ -10,6 +10,7 @@ public struct PhaseAttackMapping
 {
     public Phases phases;
     public State attack;
+    public int damage;
 }
 
 public enum State
@@ -56,7 +57,10 @@ public class Boss : BaseCharacter
     private float _timeBetweenAttacks = 1;
 
     [SerializeField]
-    private float _randomOffsetBetweenAttacks = 0.3f;
+    private float _randomTimeOffsetBetweenAttacks = 0.3f;
+
+    [SerializeField]
+    private int _generalCollideDamage = 4;
 
     [SerializeField]
     private Transform _startXPosForRoom;
@@ -136,8 +140,9 @@ public class Boss : BaseCharacter
     private GameObject _swordGO;
     //------------------------------------------------------------------------------
 
-    private State _currentState = State.Idle;
 
+    private bool _attackSpecificDamageEnabled = false;
+    private State _currentState = State.Idle;
     private Phases _currentPhase = Phases.Phase1;
     //serves as exit condition from each state for now
     private bool _tempChangeStateTrigger = true;
@@ -153,7 +158,7 @@ public class Boss : BaseCharacter
     private List<Material> matDefault = new List<Material>();
     //private bool _isBossInactive = true;
     private Rect room;
-
+    private int _attackSpecificDamage;
 
     //------------------------------------------------------------------------------
 
@@ -186,9 +191,16 @@ public class Boss : BaseCharacter
     {
         if (other.gameObject.GetComponent<Player>())
         {
-            other.gameObject.GetComponent<Player>().KnockBack(knockBackDuration, knockBackPower, m_FacingRight ? Vector2.right : Vector2.left);
-
-            Player.instance.TakeDamage(1);
+            if (_attackSpecificDamageEnabled)
+            {
+                Player.instance.TakeDamage(_attackSpecificDamage);
+                other.gameObject.GetComponent<Player>().KnockBack(knockBackDuration, knockBackPower * 1.5f, m_FacingRight ? Vector2.right : Vector2.left);
+            }
+            else
+            {
+                other.gameObject.GetComponent<Player>().KnockBack(knockBackDuration, knockBackPower, m_FacingRight ? Vector2.right : Vector2.left);
+                Player.instance.TakeDamage(_generalCollideDamage);
+            }
         }
     }
 
@@ -225,16 +237,19 @@ public class Boss : BaseCharacter
     private State ChooseAttack()
     {
         List<State> availableAttacks = new List<State>();
+        List<int> attackDamage = new List<int>();
         foreach (var attacks in _attacksPerPhase)
         {
             if (attacks.phases == _currentPhase)
             {
                 availableAttacks.Add(attacks.attack);
+                attackDamage.Add(attacks.damage);
             }
         }
 
         //TODO add range based decisions wrt to player and boss
         int randomInt = UnityEngine.Random.Range(0, availableAttacks.Count);
+        _attackSpecificDamage = attackDamage[randomInt];
         return availableAttacks[randomInt];
     }
 
@@ -371,7 +386,7 @@ public class Boss : BaseCharacter
     {
         //this is 'Start' of this state
         yield return new WaitForSeconds(0f);
-        Invoke("ToggleStateChangeTrigger", UnityEngine.Random.Range(_timeBetweenAttacks - _randomOffsetBetweenAttacks, _timeBetweenAttacks + _randomOffsetBetweenAttacks));
+        Invoke("ToggleStateChangeTrigger", UnityEngine.Random.Range(_timeBetweenAttacks - _randomTimeOffsetBetweenAttacks, _timeBetweenAttacks + _randomTimeOffsetBetweenAttacks));
 
         while (_tempChangeStateTrigger) //|| _isBossInactive)
         {
@@ -455,9 +470,6 @@ public class Boss : BaseCharacter
     {
         float boomerangeFinalDistance = _boomerangAttackRange + UnityEngine.Random.Range(-_randomBoomerangDistanceOffsetRange, _randomBoomerangDistanceOffsetRange);
 
-        //play animation of build up plus attack
-
-
         DetermineAndMoveToAttackRange(boomerangeFinalDistance);
 
         //making sure attack doesnt happen until repositioning is finished
@@ -479,7 +491,11 @@ public class Boss : BaseCharacter
         //unparent the GO first to avoid inheriting animation movement
         _swordGO.transform.parent = null;
 
+        //play the animation
         _anim.SetTrigger("Boomerang");
+
+        //enable attack specific damage
+        _attackSpecificDamageEnabled = true;
 
         //boomerang tween
         Sequence seq = DOTween.Sequence();
@@ -506,6 +522,9 @@ public class Boss : BaseCharacter
 
         //parent it back to the original thing after attack is over
         _swordGO.transform.parent = parent;
+
+        //back to normal attack damage
+        _attackSpecificDamageEnabled = false;
 
         SetState(State.Idle);
     }
@@ -534,6 +553,8 @@ public class Boss : BaseCharacter
 
         //trigger animation
         // /_anim.SetTrigger("Crush");
+        //enable attack specific damage
+        _attackSpecificDamageEnabled = true;
 
         //slam tween
         Sequence tween = _rb.DOJump(new Vector2(m_FacingRight ? transform.position.x + slamFinalDistance : transform.position.x - slamFinalDistance, transform.position.y), _slamHeight, 1, _slamLerpTime);
@@ -549,6 +570,8 @@ public class Boss : BaseCharacter
             //this is fixedupdate for this state
             yield return new WaitForFixedUpdate();
         }
+        //back to normal attack damage
+        _attackSpecificDamageEnabled = false;
 
         SetState(State.Idle);
     }
@@ -587,6 +610,9 @@ public class Boss : BaseCharacter
         //trigger animation
         _anim.SetTrigger("DashAttack");
 
+        //enable attack specific damage
+        _attackSpecificDamageEnabled = true;
+
         //makes sure this state remains until the animation and movement is complete
         _committedInAttack = true;
 
@@ -601,6 +627,9 @@ public class Boss : BaseCharacter
             //this is fixedupdate for this state
             yield return new WaitForFixedUpdate();
         }
+
+        //back to normal attack damage
+        _attackSpecificDamageEnabled = false;
 
         SetState(State.Idle);
     }
@@ -721,6 +750,11 @@ public class Boss : BaseCharacter
     {
         SetState(State.StartTaunt);
     }
+
+    public void SetAttackSpecificDamage(bool enabled)
+    {
+        _attackSpecificDamageEnabled = enabled;
+    }
 }
 
 /* oLD JUMP AND CRUSH WHICH FOLLOWS PLAYER POS ACCURATELY
@@ -795,12 +829,13 @@ IEnumerator OnPhase1_ShortRange_JumpAndCrush()
         tween.SetEase(_slamMovementEasing);
 }*/
 
-//jump and slam player
-//dash and use melee weapon on ground
-//add repositioning of boss towards the player
-//initially, there will be a stone in the center player can use to climb
+//jump and slam player                                                                                                                                                  done
+//dash and use melee weapon on ground                                                                                                                                   done
+//add repositioning of boss towards the player                                                                                                                          done 
+//initially, there will be a stone in the center player can use to climb                                                
 //while entering phase 2 boss will destroy it and make the fight difficult
-//starting of the boss fight sequence should switch 1) input off 2) lerp camera a little back to a fixed point with a bigger FOV and 3) have boss intro animation
-//integrate animations
-//and make the boss go into down mode when the fight is finished
+//starting of the boss fight sequence should switch 1) input off 2) lerp camera a little back to a fixed point with a bigger FOV and 3) have boss intro animation       done
+//integrate animations                                                                                                                                                  almost done
+//and make the boss go into down mode when the fight is finished                                                                                                        done
 //do the jump and slam 3 times or whatever the number is int the inspector
+//make the boss not take damage or get attack when his health is 0 or less
