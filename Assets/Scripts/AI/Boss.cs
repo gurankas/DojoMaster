@@ -523,6 +523,8 @@ public class Boss : BaseCharacter
         //enable attack specific damage
         _attackSpecificDamageEnabled = true;
 
+        SoundManagerScript.PlaySound("SwordThrow");
+
         //boomerang tween
         Sequence seq = DOTween.Sequence();
         var xMovementTween = _swordCopyGO.transform.DOMoveX(finalXPos, _boomerangLerpTime);

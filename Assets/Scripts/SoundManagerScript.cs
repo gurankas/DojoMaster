@@ -7,6 +7,7 @@ public class SoundManagerScript : MonoBehaviour
     public static AudioClip hitSound;
     public static AudioClip backGroundSound;
     public static AudioClip dashSound;
+    public static AudioClip swordThrowSound;
     // public static AudioClip footStepSound;
 
 
@@ -16,7 +17,7 @@ public class SoundManagerScript : MonoBehaviour
     {
         hitSound = Resources.Load<AudioClip>("HitSFX");
         backGroundSound = Resources.Load<AudioClip>("BackGroundMusic");
-        // footStepSound = Resources.Load<AudioClip>("FootStepSound");
+        swordThrowSound = Resources.Load<AudioClip>("SwordThrow");
         dashSound = Resources.Load<AudioClip>("DashSound");
 
 
@@ -36,9 +37,12 @@ public class SoundManagerScript : MonoBehaviour
             case "DashSound":
                 audioSrc.PlayOneShot(dashSound);
                 break;
-            // case "FootStepSound":
-            //     audioSrc.PlayOneShot(footStepSound);
-            //     break;
+            case "SwordThrow":
+                audioSrc.PlayOneShot(swordThrowSound);
+                break;
+                // case "FootStepSound":
+                //     audioSrc.PlayOneShot(footStepSound);
+                //     break;
         }
 
     }
