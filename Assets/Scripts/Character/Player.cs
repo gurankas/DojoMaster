@@ -429,10 +429,6 @@ public class Player : BaseCharacter
 
         _bossHealthBar.ToggleHealthBarVisibility(enabled);
 
-        SoundManagerScript.PlaySound("BackGroundMusic");
-
-        // GameObject.Find("BossHealthBar").SetActive(true);
-
     }
 
     public void StopAttackPS()

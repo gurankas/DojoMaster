@@ -421,6 +421,8 @@ public class Boss : BaseCharacter
         //disable input of player
         Player.instance.SetInputMode(false);
 
+        SoundManagerScript.PlaySound("BackGroundMusic");
+
         //play taunt animation
         _anim.SetTrigger("BossIntro");
 
