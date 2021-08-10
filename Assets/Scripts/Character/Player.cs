@@ -52,6 +52,11 @@ public class Player : BaseCharacter
     public LayerMask whatIsGround;
     public LayerMask whatIsEnemy;
 
+    [SerializeField]
+    private HealthBarScript _bossHealthBar;
+    [SerializeField]
+    private HealthBarScript _playerHealthBar;
+
 
     //checks
     //ground check
@@ -102,11 +107,15 @@ public class Player : BaseCharacter
     {
         _currentHealth = maxHealth;
 
+        _playerHealthBar.SetMaxHealth(maxHealth);
+
+        _playerHealthBar.ToggleHealthBarVisibility(true);
+
         matWhite = Resources.Load("WhiteFlash", typeof(Material)) as Material;
 
         wallJumpCoolDownCounter = wallJumpCoolDown;
 
-        for (int i = 0; i <_sr.Length ; i++)
+        for (int i = 0; i < _sr.Length; i++)
         {
             matDefault.Add(_sr[i].material);
         }
@@ -329,10 +338,10 @@ public class Player : BaseCharacter
             isAttacking = true;
             attackTime = attackCoolDown;
 
-            // if (isGrounded || jumpAttackSwitch)
-            // {
-            //     _rb.velocity = new Vector2(Mathf.Clamp(_rb.velocity.x, -0.7f, 0.7f), _rb.velocity.y);
-            // }
+            if (isGrounded)
+            {
+                _rb.velocity = new Vector2(Mathf.Clamp(_rb.velocity.x, -0.7f, 0.7f), _rb.velocity.y);
+            }
 
             if (_attackPS != null)
             {
@@ -416,6 +425,11 @@ public class Player : BaseCharacter
         _anim.SetTrigger("Idle");
         isInputEnabled = enabled;
         isInBossFight = true;
+
+        _bossHealthBar.ToggleHealthBarVisibility(enabled);
+
+        // GameObject.Find("BossHealthBar").SetActive(true);
+
     }
 
     public void StopAttackPS()
@@ -445,6 +459,7 @@ public class Player : BaseCharacter
     public void TakeDamage(int damage)
     {
         _currentHealth -= damage;
+        _playerHealthBar.SetHealth(_currentHealth);
         //camera shake effect
         CameraShake.instance.StartShake(.2f, .1f);
         _anim.SetTrigger("KnockBack");

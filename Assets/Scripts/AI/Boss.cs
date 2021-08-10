@@ -162,6 +162,8 @@ public class Boss : BaseCharacter
 
     //------------------------------------------------------------------------------
 
+    public HealthBarScript healthBar;
+
     private void OnEnable()
     {
         //_pc = GetComponent<ParabolaController>();
@@ -180,6 +182,7 @@ public class Boss : BaseCharacter
         }
 
         _currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
 
         // SetState(State.Idle);
 
@@ -283,6 +286,7 @@ public class Boss : BaseCharacter
     public void TakeDamage(int damage)
     {
         _currentHealth -= damage;
+        healthBar.SetHealth(_currentHealth);
         //camera shake effect
         CameraShake.instance.StartShake(.2f, .1f);
 
