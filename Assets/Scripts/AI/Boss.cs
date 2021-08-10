@@ -137,9 +137,11 @@ public class Boss : BaseCharacter
     private float _boomerangRotationForce = 150;
 
     [SerializeField]
-    private GameObject _swordGO;
-    //------------------------------------------------------------------------------
+    private GameObject _swordOriginalGO;
 
+    [SerializeField]
+    private GameObject _swordCopyGO;
+    //------------------------------------------------------------------------------
 
     private bool _attackSpecificDamageEnabled = false;
     private State _currentState = State.Idle;
@@ -159,6 +161,7 @@ public class Boss : BaseCharacter
     //private bool _isBossInactive = true;
     private Rect room;
     private int _attackSpecificDamage;
+    private Sword _swordRef;
 
     //------------------------------------------------------------------------------
 
@@ -171,8 +174,6 @@ public class Boss : BaseCharacter
 
     private void Start()
     {
-        // matDefault = new Material[_sr.Length];
-
         //hit feedback set up
         matWhite = Resources.Load("WhiteFlash", typeof(Material)) as Material;
 
@@ -187,6 +188,8 @@ public class Boss : BaseCharacter
         // SetState(State.Idle);
 
         room = new Rect(_startXPosForRoom.position.x, _startYPosForRoom.position.y, _endXPosForRoom.position.x - _startXPosForRoom.position.x, _endYPosForRoom.position.y - _startYPosForRoom.position.y);
+
+        _swordRef = GetComponentInChildren<Sword>();
     }
 
     //knockBack when overlap with boss  
@@ -486,31 +489,39 @@ public class Boss : BaseCharacter
             }
         }
 
-        float finalXPos = m_FacingRight ? _swordGO.transform.position.x + boomerangeFinalDistance : _swordGO.transform.position.x - boomerangeFinalDistance;
+        float finalXPos = m_FacingRight ? _swordOriginalGO.transform.position.x + boomerangeFinalDistance : _swordOriginalGO.transform.position.x - boomerangeFinalDistance;
 
         //setup vars
-        var parent = _swordGO.transform.parent;
-        float initPosX = _swordGO.transform.position.x;
+        var parent = _swordCopyGO.transform.parent;
+        float initPosX = _swordCopyGO.transform.position.x;
+
 
         //unparent the GO first to avoid inheriting animation movement
-        _swordGO.transform.parent = null;
+        _swordCopyGO.transform.parent = null;
+
+        //disable the original sword
+        _swordCopyGO.SetActive(true);
+        _swordOriginalGO.SetActive(false);
 
         //play the animation
         _anim.SetTrigger("Boomerang");
+
+        //enable sword collider
+        _swordRef.ToggleCollider(true, _attackSpecificDamage, knockBackDuration, knockBackPower, m_FacingRight);
 
         //enable attack specific damage
         _attackSpecificDamageEnabled = true;
 
         //boomerang tween
         Sequence seq = DOTween.Sequence();
-        var xMovementTween = _swordGO.transform.DOMoveX(finalXPos, _boomerangLerpTime);
+        var xMovementTween = _swordCopyGO.transform.DOMoveX(finalXPos, _boomerangLerpTime);
         seq.Append(xMovementTween);
-        var zRotationTween = _swordGO.transform.DOPunchRotation(new Vector3(0, 0, _boomerangRotationForce), _boomerangLerpTime);
+        var zRotationTween = _swordCopyGO.transform.DOPunchRotation(new Vector3(0, 0, _boomerangRotationForce), _boomerangLerpTime);
         seq.Insert(0, zRotationTween);
         seq.AppendInterval(_boomerangMidInterval);
-        var xBackMovementTween = _swordGO.transform.DOMoveX(initPosX, _boomerangLerpTime);
+        var xBackMovementTween = _swordCopyGO.transform.DOMoveX(initPosX, _boomerangLerpTime);
         seq.Append(xBackMovementTween);
-        var zBackRotationTween = _swordGO.transform.DOPunchRotation(new Vector3(0, 0, _boomerangRotationForce), _boomerangLerpTime);
+        var zBackRotationTween = _swordCopyGO.transform.DOPunchRotation(new Vector3(0, 0, _boomerangRotationForce), _boomerangLerpTime);
         seq.Insert((seq.Duration() / 2) + (_boomerangMidInterval / 2), zBackRotationTween);
 
         //makes sure this state remains until the animation and movement is complete
@@ -525,7 +536,14 @@ public class Boss : BaseCharacter
         }
 
         //parent it back to the original thing after attack is over
-        _swordGO.transform.parent = parent;
+        _swordCopyGO.transform.parent = parent;
+
+        //disable sword collider
+        _swordRef.ToggleCollider(false, _attackSpecificDamage, knockBackDuration, knockBackPower, m_FacingRight);
+
+        //disable the original sword
+        _swordOriginalGO.SetActive(true);
+        _swordCopyGO.SetActive(false);
 
         //back to normal attack damage
         _attackSpecificDamageEnabled = false;
@@ -556,7 +574,8 @@ public class Boss : BaseCharacter
         }
 
         //trigger animation
-        // /_anim.SetTrigger("Crush");
+        _anim.SetTrigger("SlamAttack");
+
         //enable attack specific damage
         _attackSpecificDamageEnabled = true;
 
@@ -614,6 +633,9 @@ public class Boss : BaseCharacter
         //trigger animation
         _anim.SetTrigger("DashAttack");
 
+        //enable sword collider
+        _swordRef.ToggleCollider(true, _attackSpecificDamage, knockBackDuration, knockBackPower, m_FacingRight);
+
         //enable attack specific damage
         _attackSpecificDamageEnabled = true;
 
@@ -634,6 +656,9 @@ public class Boss : BaseCharacter
 
         //back to normal attack damage
         _attackSpecificDamageEnabled = false;
+
+        //disable sword collider
+        _swordRef.ToggleCollider(false, _attackSpecificDamage, knockBackDuration, knockBackPower, m_FacingRight);
 
         SetState(State.Idle);
     }
