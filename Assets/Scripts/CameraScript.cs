@@ -9,7 +9,7 @@ public class CameraScript : MonoBehaviour
 
     public Transform bossPoint;
 
-    public float orthographicSize = 10.0f;
+    public float orthographicSize = 9.5f;
 
     // Update is called once per frame
     void Update()
