@@ -152,7 +152,7 @@ public class Player : BaseCharacter
             }
 
             //adding restart if needed during demonstration
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.R) || Input.GetButtonDown("Submit"))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
@@ -429,10 +429,6 @@ public class Player : BaseCharacter
 
         _bossHealthBar.ToggleHealthBarVisibility(enabled);
 
-        SoundManagerScript.PlaySound("BackGroundMusic");
-
-        // GameObject.Find("BossHealthBar").SetActive(true);
-
     }
 
     public void StopAttackPS()
@@ -500,6 +496,12 @@ public class Player : BaseCharacter
     private void Die()
     {
         _anim.SetTrigger("Die");
+        Invoke("Lose", 2);
+    }
+
+    private void Lose()
+    {
+        SceneManager.LoadScene(4);
     }
 
     private IEnumerator GetInvincible()

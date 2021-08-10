@@ -16,7 +16,7 @@ public class CameraScript : MonoBehaviour
 
         if (Player.isInBossFight)
         {
-            Camera.main.orthographicSize = 9;
+            Camera.main.orthographicSize = 13.5f;
             transform.DOMove(bossPoint.position, 1);
         }
         else
