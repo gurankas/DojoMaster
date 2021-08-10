@@ -9,6 +9,8 @@ public class CameraScript : MonoBehaviour
 
     public Transform bossPoint;
 
+    public float orthographicSize = 10.0f;
+
     // Update is called once per frame
     void Update()
     {
@@ -16,7 +18,7 @@ public class CameraScript : MonoBehaviour
 
         if (Player.isInBossFight)
         {
-            Camera.main.orthographicSize = 13.5f;
+            Camera.main.orthographicSize = orthographicSize;
             transform.DOMove(bossPoint.position, 1);
         }
         else
