@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Gyms/PauseMenu.unity
     guid: 3c5e0cc62e213124b800d3d699a93d0b
+  - enabled: 1
+    path: Assets/Scenes/Gyms/WinScene.unity
+    guid: f9fa11ed76904a143bc1ab5ace4fd0a7
+  - enabled: 1
+    path: Assets/Scenes/Gyms/LoseScene.unity
+    guid: c5223ce3c4106294b8046a3adeb59a74
   m_configObjects: {}

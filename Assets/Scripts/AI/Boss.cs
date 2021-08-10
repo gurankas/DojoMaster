@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 [Serializable]
 public struct PhaseAttackMapping
@@ -320,6 +321,14 @@ public class Boss : BaseCharacter
         Debug.Log("Enemy Died!");
         _anim.SetTrigger("DownState");
         SetState(State.Defeated);
+
+        Invoke("Win", 3);
+
+    }
+
+    private void Win()
+    {
+        SceneManager.LoadScene(3);
     }
 
 
