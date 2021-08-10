@@ -9,6 +9,7 @@ public class BaseCharacter : MonoBehaviour
     [SerializeField]
     protected Animator _anim;
     protected SpriteRenderer[] _sr;
+    protected BoxCollider2D _bc;
 
     [SerializeField]
     protected PlayerAttackPS _attackPS;
@@ -37,6 +38,7 @@ public class BaseCharacter : MonoBehaviour
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
         rbScale = _rb.transform.localScale.x;
+        _bc = GetComponent<BoxCollider2D>();
     }
 
     protected void Move(float horizontalInput)
@@ -44,7 +46,7 @@ public class BaseCharacter : MonoBehaviour
         //We set the velocity based on the input of the player
         //We set the y to rb.velocity.y, because if we set it to 0 our object does not move down with gravity
         _rb.velocity = new Vector2(horizontalInput * speed, _rb.velocity.y);
-    
+
         //If moving left...
         if (horizontalInput > 0 && !m_FacingRight)
         {
