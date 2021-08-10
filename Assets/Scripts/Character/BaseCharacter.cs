@@ -44,7 +44,7 @@ public class BaseCharacter : MonoBehaviour
         //We set the velocity based on the input of the player
         //We set the y to rb.velocity.y, because if we set it to 0 our object does not move down with gravity
         _rb.velocity = new Vector2(horizontalInput * speed, _rb.velocity.y);
-
+    
         //If moving left...
         if (horizontalInput > 0 && !m_FacingRight)
         {

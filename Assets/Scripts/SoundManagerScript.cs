@@ -5,11 +5,20 @@ using UnityEngine;
 public class SoundManagerScript : MonoBehaviour
 {
     public static AudioClip hitSound;
+    public static AudioClip backGroundSound;
+    public static AudioClip dashSound;
+    // public static AudioClip footStepSound;
+
+
     static AudioSource audioSrc;
 
     private void Start()
     {
         hitSound = Resources.Load<AudioClip>("HitSFX");
+        backGroundSound = Resources.Load<AudioClip>("BackGroundMusic");
+        // footStepSound = Resources.Load<AudioClip>("FootStepSound");
+        dashSound = Resources.Load<AudioClip>("DashSound");
+
 
         audioSrc = GetComponent<AudioSource>();
     }
@@ -21,7 +30,29 @@ public class SoundManagerScript : MonoBehaviour
             case "Hit":
                 audioSrc.PlayOneShot(hitSound);
                 break;
+            case "BackGroundMusic":
+                audioSrc.PlayOneShot(backGroundSound);
+                break;
+            case "DashSound":
+                audioSrc.PlayOneShot(dashSound);
+                break;
+            // case "FootStepSound":
+            //     audioSrc.PlayOneShot(footStepSound);
+            //     break;
         }
 
     }
+
+    // public static void StopSound(string clip)
+    // {
+    //     switch (clip)
+    //     {
+    //         case "BackGroundMusic":
+    //             audioSrc.Stop();
+    //             break;
+    //             // case "FootStepSound":
+    //             //     audioSrc.PlayOneShot(footStepSound);
+    //             //     break;
+    //     }
+    // }
 }

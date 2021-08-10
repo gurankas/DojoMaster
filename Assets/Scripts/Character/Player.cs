@@ -388,11 +388,11 @@ public class Player : BaseCharacter
         //Ignore enemy collision when rolling
         Physics2D.IgnoreLayerCollision(10, 11, isRolling);
 
-
         if (Input.GetButtonDown("Fire3") && !isAttacking && !isRolling)
         {
             isRolling = true;
             _anim.SetBool("IsRolling", true);
+            SoundManagerScript.PlaySound("DashSound");
             currentRollTime = rollTime;
             _rb.velocity = Vector2.zero;
         }
@@ -427,6 +427,8 @@ public class Player : BaseCharacter
         isInBossFight = true;
 
         _bossHealthBar.ToggleHealthBarVisibility(enabled);
+
+        SoundManagerScript.PlaySound("BackGroundMusic");
 
         // GameObject.Find("BossHealthBar").SetActive(true);
 
@@ -464,6 +466,7 @@ public class Player : BaseCharacter
         CameraShake.instance.StartShake(.2f, .1f);
         _anim.SetTrigger("KnockBack");
 
+        StartCoroutine("GetInvincible");
 
         //hit feedback
         for (int i = 0; i < _sr.Length; i++)
@@ -471,15 +474,18 @@ public class Player : BaseCharacter
             _sr[i].material = matWhite;
         }
 
+        //player health check
         if (_currentHealth <= 0)
         {
             Die();
-            Invoke("ResetMaterial", 0.1f);
+            Invoke("ResetMaterial", 0.15f);
         }
         else
         {
-            Invoke("ResetMaterial", 0.1f);
+            Invoke("ResetMaterial", 0.15f);
         }
+
+
     }
 
     private void ResetMaterial()
@@ -493,6 +499,15 @@ public class Player : BaseCharacter
     private void Die()
     {
         _anim.SetTrigger("Die");
+    }
+
+    private IEnumerator GetInvincible()
+    {
+        Physics2D.IgnoreLayerCollision(10, 11, true);
+
+        yield return new WaitForSeconds(1f);
+
+        Physics2D.IgnoreLayerCollision(10, 11, false);
     }
 
 }
