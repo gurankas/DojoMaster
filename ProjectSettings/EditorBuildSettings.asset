@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Gyms/Menu.unity
+    guid: a8adc4b2a07c1cf4e87b88f91ab64c7b
+  - enabled: 1
     path: Assets/Scenes/Gyms/Gym_Gurankas.unity
     guid: c2ce501c5220b6c468706b6d637e94ad
   - enabled: 1
-    path: Assets/Scenes/Gyms/KevinScene.unity
-    guid: 9a286a02cfb6a3e40814a23b9d742ea2
-  - enabled: 1
-    path: Assets/Scenes/GameScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Scenes/Gyms/PauseMenu.unity
+    guid: 3c5e0cc62e213124b800d3d699a93d0b
   m_configObjects: {}
