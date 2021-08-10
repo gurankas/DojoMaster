@@ -246,9 +246,9 @@ public class Boss : BaseCharacter
             SetPhase(Phases.Phase2);
         }
 
-        FaceTowardsPlayer();
         if (!_committedInAttack)
         {
+            FaceTowardsPlayer();
         }
     }
 
@@ -479,6 +479,8 @@ public class Boss : BaseCharacter
         //unparent the GO first to avoid inheriting animation movement
         _swordGO.transform.parent = null;
 
+        _anim.SetTrigger("Boomerang");
+
         //boomerang tween
         Sequence seq = DOTween.Sequence();
         var xMovementTween = _swordGO.transform.DOMoveX(finalXPos, _boomerangLerpTime);
@@ -530,15 +532,15 @@ public class Boss : BaseCharacter
             }
         }
 
+        //trigger animation
+        // /_anim.SetTrigger("Crush");
+
         //slam tween
         Sequence tween = _rb.DOJump(new Vector2(m_FacingRight ? transform.position.x + slamFinalDistance : transform.position.x - slamFinalDistance, transform.position.y), _slamHeight, 1, _slamLerpTime);
         tween.SetEase(_curve);
 
         //makes sure this state remains until the animation and movement is complete
         _committedInAttack = true;
-
-        //this is 'Start' of this state
-        // yield return new WaitForSeconds(0.0f);
 
         AttackComplete(tween);
 
@@ -582,7 +584,8 @@ public class Boss : BaseCharacter
         float finalXPos = m_FacingRight ? transform.position.x + _dashDistanceForAttack : transform.position.x - _dashDistanceForAttack;
         finalXPos += randomOffset;
 
-        //TODO trigger animation
+        //trigger animation
+        _anim.SetTrigger("DashAttack");
 
         //makes sure this state remains until the animation and movement is complete
         _committedInAttack = true;
@@ -704,10 +707,13 @@ public class Boss : BaseCharacter
     //should it account for Y repositioning as well?
     async private void Reposition(Vector2 pos)
     {
+        //make the run animation play while repositioning
+        _anim.SetFloat("HorizontalSpeed", 1);
 
         //using local distance for calculation of time to be taken for 
         Tweener tweener = transform.DOMove(pos, Mathf.Abs(pos.x - transform.position.x) / speed);
         await tweener.AsyncWaitForCompletion();
+        _anim.SetFloat("HorizontalSpeed", 0);
         _repositioning = false;
     }
 
