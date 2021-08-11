@@ -9,6 +9,7 @@ public class BaseCharacter : MonoBehaviour
     [SerializeField]
     protected Animator _anim;
     protected SpriteRenderer[] _sr;
+    protected BoxCollider2D _bc;
 
     [SerializeField]
     protected PlayerAttackPS _attackPS;
@@ -33,9 +34,11 @@ public class BaseCharacter : MonoBehaviour
 
     private void Awake()
     {
+        _sr = GetComponentsInChildren<SpriteRenderer>();
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
         rbScale = _rb.transform.localScale.x;
+        _bc = GetComponent<BoxCollider2D>();
     }
 
     protected void Move(float horizontalInput)

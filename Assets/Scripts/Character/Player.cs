@@ -13,6 +13,9 @@ public class Player : BaseCharacter
 
     public static bool isInputEnabled = true;
 
+    public static bool isInBossFight;
+
+
     //wallSlide state Check 
     [Space]
     [Header("Wall check-----------------------------------------------------")]
@@ -49,6 +52,11 @@ public class Player : BaseCharacter
     public LayerMask whatIsGround;
     public LayerMask whatIsEnemy;
 
+    [SerializeField]
+    private HealthBarScript _bossHealthBar;
+    [SerializeField]
+    private HealthBarScript _playerHealthBar;
+
 
     //checks
     //ground check
@@ -68,6 +76,7 @@ public class Player : BaseCharacter
 
     private bool jumpAttackSwitch = false;
 
+
     //jump 
     private float jumpTimeCounter;
     //wall
@@ -81,6 +90,11 @@ public class Player : BaseCharacter
     //movement
     private float runInput;
 
+    private Material matWhite;
+    private List<Material> matDefault = new List<Material>();
+
+    private int _currentHealth;
+
     private void OnEnable()
     {
         if (instance == null)
@@ -92,11 +106,30 @@ public class Player : BaseCharacter
 
     private void Start()
     {
+        isInputEnabled = true;
+        _currentHealth = maxHealth;
+
+        _playerHealthBar.SetMaxHealth(maxHealth);
+
+        matWhite = Resources.Load("WhiteFlash", typeof(Material)) as Material;
+
         wallJumpCoolDownCounter = wallJumpCoolDown;
+
+        for (int i = 0; i < _sr.Length; i++)
+        {
+            matDefault.Add(_sr[i].material);
+        }
     }
 
     private void Update()
     {
+
+        _playerHealthBar.ToggleHealthBarVisibility(true);
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Die();
+        }
 
         //animation
         _anim.SetFloat("Speed", Mathf.Abs(runInput));
@@ -121,23 +154,23 @@ public class Player : BaseCharacter
             }
 
             //adding restart if needed during demonstration
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.R) || Input.GetButtonDown("Submit"))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
 
-            //jumpAttackSwitch
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                if (jumpAttackSwitch)
-                {
-                    jumpAttackSwitch = false;
-                }
-                else
-                {
-                    jumpAttackSwitch = true;
-                }
-            }
+            // //jumpAttackSwitch
+            // if (Input.GetKeyDown(KeyCode.Q))
+            // {
+            //     if (jumpAttackSwitch)
+            //     {
+            //         jumpAttackSwitch = false;
+            //     }
+            //     else
+            //     {
+            //         jumpAttackSwitch = true;
+            //     }
+            // }
         }
         else
         {
@@ -308,8 +341,7 @@ public class Player : BaseCharacter
             isAttacking = true;
             attackTime = attackCoolDown;
 
-
-            if (isGrounded || jumpAttackSwitch)
+            if (isGrounded)
             {
                 _rb.velocity = new Vector2(Mathf.Clamp(_rb.velocity.x, -0.7f, 0.7f), _rb.velocity.y);
             }
@@ -349,8 +381,11 @@ public class Player : BaseCharacter
         foreach (Collider2D enemy in hitEnemies)
         {
             Debug.Log("We Hit " + enemy.name);
-            enemy.GetComponent<Boss>().TakeDamage(attackDamage);
-
+            if (enemy.GetComponent<Boss>())
+            {
+                enemy.GetComponent<Boss>().TakeDamage(attackDamage);
+                SoundManagerScript.PlaySound("Hit");
+            }
         }
     }
 
@@ -359,11 +394,11 @@ public class Player : BaseCharacter
         //Ignore enemy collision when rolling
         Physics2D.IgnoreLayerCollision(10, 11, isRolling);
 
-
         if (Input.GetButtonDown("Fire3") && !isAttacking && !isRolling)
         {
             isRolling = true;
             _anim.SetBool("IsRolling", true);
+            SoundManagerScript.PlaySound("DashSound");
             currentRollTime = rollTime;
             _rb.velocity = Vector2.zero;
         }
@@ -395,6 +430,10 @@ public class Player : BaseCharacter
         _anim.SetBool("IsRolling", false);
         _anim.SetTrigger("Idle");
         isInputEnabled = enabled;
+        isInBossFight = true;
+
+        _bossHealthBar.ToggleHealthBarVisibility(enabled);
+
     }
 
     public void StopAttackPS()
@@ -404,4 +443,82 @@ public class Player : BaseCharacter
             _attackPS.gameObject.SetActive(false);
         }
     }
+
+    public void KnockBack(float knockBackDuration, float knockBackPower, Vector2 newdirection)
+    {
+        float timer = 0;
+
+        if (!isAttacking)
+        {
+            while (knockBackDuration > timer)
+            {
+                timer += Time.deltaTime;
+                _rb.AddForce(newdirection * knockBackPower);
+            }
+
+        }
+
+    }
+
+    public void TakeDamage(int damage)
+    {
+        _currentHealth -= damage;
+        _playerHealthBar.SetHealth(_currentHealth);
+        //camera shake effect
+        CameraShake.instance.StartShake(.2f, .1f);
+        _anim.SetTrigger("KnockBack");
+
+        StartCoroutine("GetInvincible");
+
+        //hit feedback
+        for (int i = 0; i < _sr.Length; i++)
+        {
+            _sr[i].material = matWhite;
+        }
+
+        //player health check
+        if (_currentHealth <= 0)
+        {
+            Die();
+            Invoke("ResetMaterial", 0.15f);
+        }
+        else
+        {
+            Invoke("ResetMaterial", 0.15f);
+        }
+
+
+    }
+
+    private void ResetMaterial()
+    {
+        for (int i = 0; i < _sr.Length; i++)
+        {
+            _sr[i].material = matDefault[i];
+        }
+    }
+
+    private void Die()
+    {
+        _anim.SetTrigger("Die");
+        SetInputMode(false);
+        _bc.enabled = false;
+        _rb.gravityScale = 0;
+        Invoke("Lose", 2);
+    }
+
+    private void Lose()
+    {
+        SceneManager.LoadScene(4);
+    }
+
+    private IEnumerator GetInvincible()
+    {
+        Physics2D.IgnoreLayerCollision(10, 11, true);
+
+        yield return new WaitForSeconds(1f);
+
+        Physics2D.IgnoreLayerCollision(10, 11, false);
+    }
+
 }
