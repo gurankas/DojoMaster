@@ -779,12 +779,12 @@ public class Boss : BaseCharacter
     async private void Reposition(Vector2 pos)
     {
         //make the run animation play while repositioning
-        _anim.SetFloat("HorizontalSpeed", 1);
+        _anim?.SetFloat("HorizontalSpeed", 1);
 
         //using local distance for calculation of time to be taken for 
         Tweener tweener = transform.DOMove(pos, Mathf.Abs(pos.x - transform.position.x) / speed);
         await tweener.AsyncWaitForCompletion();
-        _anim.SetFloat("HorizontalSpeed", 0);
+        _anim?.SetFloat("HorizontalSpeed", 0);
         _repositioning = false;
     }
 

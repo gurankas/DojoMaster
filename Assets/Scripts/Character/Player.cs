@@ -107,6 +107,7 @@ public class Player : BaseCharacter
     private void Start()
     {
         isInputEnabled = true;
+        isInBossFight = false;
         _currentHealth = maxHealth;
 
         _playerHealthBar.SetMaxHealth(maxHealth);
