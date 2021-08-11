@@ -106,8 +106,7 @@ public class Player : BaseCharacter
 
     private void Start()
     {
-        SetInputMode(true);
-
+        isInputEnabled = true;
         _currentHealth = maxHealth;
 
         _playerHealthBar.SetMaxHealth(maxHealth);
