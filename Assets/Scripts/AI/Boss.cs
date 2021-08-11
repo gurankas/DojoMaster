@@ -227,8 +227,8 @@ public class Boss : BaseCharacter
     private void OnDrawGizmos()
     {
         //helps visualize the state of the AI
-        Handles.Label(transform.position + new Vector3(0, 2, 0), $"{m_FacingRight}");
-        Handles.Label(transform.position + new Vector3(0, 2.5f, 0), $"{_currentState}");
+        //Handles.Label(transform.position + new Vector3(0, 2, 0), $"{m_FacingRight}");
+        //Handles.Label(transform.position + new Vector3(0, 2.5f, 0), $"{_currentState}");
 
         // Green
         Gizmos.color = new Color(0.0f, 1.0f, 0.0f);

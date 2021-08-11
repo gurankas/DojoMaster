@@ -7,7 +7,7 @@ public class GameOverMenu : MonoBehaviour
 {
     public void Restart()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("Gym_Gurankas");
     }
 
     public void QuitGame()
